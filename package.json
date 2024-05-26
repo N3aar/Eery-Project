@@ -6,7 +6,7 @@
     "license": "MIT",
     "scripts": {
         "clean": "rm -rf dist",
-        "start": "node dist/src/index.js",
+        "start": "node --env-file=.env .",
         "build": "pnpm run clean && swc src --out-dir dist --source-maps",
         "dev": "nodemon --exec \"pnpm run build && pnpm run start\" --watch src --ext ts",
         "lint": "biome check src",
@@ -16,6 +16,7 @@
         "@biomejs/biome": "1.7.3",
         "@swc/cli": "^0.3.12",
         "@swc/core": "^1.5.7",
+        "@types/node": "^20.12.12",
         "nodemon": "^3.1.1"
     }
 }

@@ -1,6 +1,9 @@
 # build
 dist/
 
+# env
+.env
+
 # Logs
 logs
 *.log
