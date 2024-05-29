@@ -19,9 +19,11 @@
 		"@swc/cli": "^0.3.12",
 		"@swc/core": "^1.5.7",
 		"@types/node": "^20.12.12",
-		"nodemon": "^3.1.1"
+		"nodemon": "^3.1.1",
+		"prisma": "^5.14.0"
 	},
 	"dependencies": {
+		"@prisma/client": "5.14.0",
 		"@sapphire/framework": "^5.2.1",
 		"discord.js": "14.x"
 	}
