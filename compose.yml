@@ -1,0 +1,12 @@
+services:
+  bot:
+    build: .
+    environment:
+      - TOKEN=${TOKEN}
+      - NODE_ENV=prod
+    volumes:
+      - eery-data:/data
+
+volumes:
+  eery-data:
+    external: false

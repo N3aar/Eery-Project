@@ -7,9 +7,10 @@
 	"license": "MIT",
 	"scripts": {
 		"clean": "rm -rf dist",
-		"start": "node --env-file=.env .",
+		"start": "node .",
+		"start:env": "node --env-file=.env .",
 		"build": "pnpm run clean && swc src --out-dir dist --source-maps",
-		"dev": "nodemon --exec \"pnpm run build && pnpm run start\" --watch src --ext ts",
+		"dev": "nodemon --exec \"pnpm run build && pnpm run start:env\" --watch src --ext ts",
 		"lint": "biome check src",
 		"lint:fix": "biome check --apply src"
 	},
