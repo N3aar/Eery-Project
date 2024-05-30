@@ -1,7 +1,8 @@
-import { LogLevel, SapphireClient } from "@sapphire/framework";
+import { LogLevel } from "@sapphire/framework";
 import { GatewayIntentBits } from "discord.js";
+import { Client } from "./Client.js";
 
-const client = new SapphireClient({
+const client = new Client({
 	defaultPrefix: "!",
 	caseInsensitiveCommands: true,
 	logger: {

@@ -17,6 +17,9 @@ importers:
       '@sapphire/framework':
         specifier: ^5.2.1
         version: 5.2.1
+      '@sapphire/pieces':
+        specifier: ^4.2.2
+        version: 4.2.2
       dayjs:
         specifier: ^1.11.11
         version: 1.11.11
