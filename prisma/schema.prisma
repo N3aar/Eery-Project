@@ -34,6 +34,14 @@ model Events {
   updatedAt   DateTime @default(now()) @map("updated_at")
 }
 
+model Daily {
+  id        String  @id @default(cuid()) @map("id")
+  day       Int     @default(0) @map("day")
+  afternoon Int     @default(0) @map("afternoon")
+  night     Int     @default(0) @map("night")
+  Guild     Guild[]
+}
+
 model Guild {
   id          String   @id @default(cuid()) @map("id")
   discordId   String   @unique @map("discord_id")
@@ -41,4 +49,6 @@ model Guild {
   Events      Events[] @relation("GuildEvents")
   createdAt   DateTime @default(now()) @map("created_at")
   updatedAt   DateTime @default(now()) @map("updated_at")
+  Daily       Daily?   @relation(fields: [dailyId], references: [id])
+  dailyId     String?  @map("daily_id")
 }
