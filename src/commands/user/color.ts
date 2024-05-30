@@ -104,13 +104,6 @@ export class ColorCommand extends Command {
 		const existentRole =
 			guild.roles && this.findRoleWithColor(guild.roles.cache, color);
 
-		const guildRoles = await guild.roles.fetch();
-		for (const role of guildRoles.values()) {
-			if (this.isHexColor(role.name) && role.members.size <= 0) {
-				role.delete("No members using!");
-			}
-		}
-
 		const decimalColor = Number.parseInt(color.replace("#", ""), 16);
 		const newRole =
 			existentRole ??
