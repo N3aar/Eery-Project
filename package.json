@@ -6,7 +6,7 @@
 	"type": "module",
 	"license": "MIT",
 	"scripts": {
-		"clean": "rm -rf dist",
+		"clean": "rimraf dist",
 		"start": "node .",
 		"start:env": "node --env-file=.env .",
 		"build": "pnpm run clean && tsc && tsc-alias",
@@ -21,6 +21,7 @@
 		"@types/node": "^20.12.12",
 		"nodemon": "^3.1.1",
 		"prisma": "^5.14.0",
+		"rimraf": "^5.0.7",
 		"tsc-alias": "^1.8.10",
 		"typescript": "^5.4.5"
 	},
