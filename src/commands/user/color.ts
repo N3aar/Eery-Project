@@ -1,9 +1,9 @@
 import { Command } from "@sapphire/framework";
 import type {
+	Collection,
+	Guild,
 	GuildMemberRoleManager,
 	Role,
-	Guild,
-	Collection,
 } from "discord.js";
 
 export class ColorCommand extends Command {
