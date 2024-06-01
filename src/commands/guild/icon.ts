@@ -1,6 +1,6 @@
+import { EmbedColors } from "@/utils/contants.js";
 import { Command } from "@sapphire/framework";
 import { EmbedBuilder, type ImageURLOptions } from "discord.js";
-import { EmbedColors } from "@/utils/contants.js";
 
 export class GuildIconCommand extends Command {
 	public constructor(context: Command.LoaderContext, options: Command.Options) {
