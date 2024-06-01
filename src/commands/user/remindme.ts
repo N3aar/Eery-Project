@@ -34,10 +34,11 @@ export class RemindMeCommand extends Command {
 		if (!member || !interaction.channel) return;
 
 		const time = interaction.options.getNumber("minutes") || 15;
-		const message = interaction.options.getString("message") || "";
-
 		const minutes = Math.max(Math.min(time, 60), 1);
+
 		const ms = minutes * 60000;
+		const message =
+			interaction.options.getString("message") || `${time} Minutos`;
 
 		const channel = interaction.channel as TextChannel;
 		const memberId = member.id;
