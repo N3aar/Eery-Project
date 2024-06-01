@@ -20,7 +20,7 @@ services:
         discord://${DEPLOY_WEBHOOK_TOKEN}@${DEPLOY_WEBHOOK_ID}
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
-    command: --interval 30 --cleanup --label-enable
+    command: --interval 60 --cleanup --label-enable
 
 volumes:
   eery-data:
