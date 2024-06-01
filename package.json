@@ -13,7 +13,7 @@
 		"dev": "nodemon --exec \"pnpm run build && pnpm run start:env\" --watch src --ext ts",
 		"lint": "biome check src",
 		"lint:fix": "biome check --apply src",
-		"prepare": "husky"
+		"prepare": "husky || true"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.7.3",
