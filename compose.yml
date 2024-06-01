@@ -1,0 +1,16 @@
+services:
+  bot:
+    image: ghcr.io/n3aar/eery-project:main
+    container_name: eery-bot
+    volumes:
+      - eery-data:/data
+
+  watchtower:
+    image: containrrr/watchtower
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    command: --interval 300 --cleanup --label-enable --run-once eery-bot
+
+volumes:
+  eery-data:
+    external: false
