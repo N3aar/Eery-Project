@@ -1,0 +1,54 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String    @id @default(cuid()) @map("id")
+  discordId String    @unique @map("discord_id")
+  xp        Int       @default(0) @map("xp")
+  level     Int       @default(0) @map("level")
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @default(now()) @map("updated_at")
+  birthday  DateTime? @map("birthday")
+  Events    Events[]  @relation("UserEvents")
+}
+
+model Events {
+  id          String   @id @default(cuid()) @map("id")
+  description String   @map("description")
+  date        DateTime @map("date")
+  repeat      Boolean  @default(false) @map("repeat")
+  guildId     String?  @map("guild_id")
+  Guild       Guild?   @relation("GuildEvents", fields: [guildId], references: [id])
+  createdBy   String?  @map("created_by")
+  User        User?    @relation("UserEvents", fields: [createdBy], references: [discordId])
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @default(now()) @map("updated_at")
+}
+
+model Daily {
+  id        String  @id @default(cuid()) @map("id")
+  day       Int     @default(0) @map("day")
+  afternoon Int     @default(0) @map("afternoon")
+  night     Int     @default(0) @map("night")
+  Guild     Guild[]
+}
+
+model Guild {
+  id          String   @id @default(cuid()) @map("id")
+  discordId   String   @unique @map("discord_id")
+  mainChannel String?  @map("main_channel")
+  Events      Events[] @relation("GuildEvents")
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @default(now()) @map("updated_at")
+  Daily       Daily?   @relation(fields: [dailyId], references: [id])
+  dailyId     String?  @map("daily_id")
+}

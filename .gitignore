@@ -4,6 +4,10 @@ dist/
 # env
 .env
 
+# database
+*.sqlite
+*.sqlite-journal
+
 # Logs
 logs
 *.log

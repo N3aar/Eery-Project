@@ -2,14 +2,15 @@
 	"name": "eery-project",
 	"version": "1.0.0",
 	"description": "Discord bot for União Sinistra server",
-	"main": "dist/src/index.js",
+	"main": "dist/index.js",
 	"type": "module",
 	"license": "MIT",
 	"scripts": {
-		"clean": "rm -rf dist",
-		"start": "node --env-file=.env .",
-		"build": "pnpm run clean && swc src --out-dir dist --source-maps",
-		"dev": "nodemon --exec \"pnpm run build && pnpm run start\" --watch src --ext ts",
+		"clean": "rimraf dist",
+		"start": "node .",
+		"start:env": "node --env-file=.env .",
+		"build": "pnpm run clean && tsc && tsc-alias",
+		"dev": "nodemon --exec \"pnpm run build && pnpm run start:env\" --watch src --ext ts",
 		"lint": "biome check src",
 		"lint:fix": "biome check --apply src"
 	},
@@ -18,10 +19,18 @@
 		"@swc/cli": "^0.3.12",
 		"@swc/core": "^1.5.7",
 		"@types/node": "^20.12.12",
-		"nodemon": "^3.1.1"
+		"nodemon": "^3.1.1",
+		"prisma": "^5.14.0",
+		"rimraf": "^5.0.7",
+		"tsc-alias": "^1.8.10",
+		"typescript": "^5.4.5"
 	},
 	"dependencies": {
+		"@prisma/client": "5.14.0",
+		"@sapphire/discord.js-utilities": "^7.2.1",
 		"@sapphire/framework": "^5.2.1",
+		"@sapphire/pieces": "^4.2.2",
+		"dayjs": "^1.11.11",
 		"discord.js": "14.x"
 	}
 }
