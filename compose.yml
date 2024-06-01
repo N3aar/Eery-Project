@@ -1,6 +1,7 @@
 services:
   bot:
     image: ghcr.io/n3aar/eery-project:main
+    restart: always
     container_name: eery-bot
     environment:
       - TOKEN=${TOKEN}
@@ -10,6 +11,7 @@ services:
 
   watchtower:
     image: containrrr/watchtower
+    restart: always
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
     command: --interval 300 --cleanup --label-enable --run-once eery-bot
