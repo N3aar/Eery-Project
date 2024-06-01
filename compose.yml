@@ -3,9 +3,9 @@ services:
     image: ghcr.io/n3aar/eery-project:main
     restart: always
     container_name: eery-bot
-    environment:
-      - TOKEN=${TOKEN}
-      - NODE_ENV=prod
+    env_file:
+      - path: ./.env
+        required: false
     volumes:
       - eery-data:/data
 
