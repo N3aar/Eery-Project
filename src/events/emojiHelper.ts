@@ -1,5 +1,5 @@
-import type { TextChannel, Message } from "discord.js";
 import { container } from "@sapphire/pieces";
+import type { Message, TextChannel } from "discord.js";
 
 export default async function emojiHelper(message: Message) {
 	const clientEmojis = container.client.emojis.cache;
