@@ -9,7 +9,6 @@ COPY prisma ./prisma
 RUN corepack enable
 
 RUN pnpm install
-RUN pnpm generate
 
 COPY . .
 
@@ -27,7 +26,6 @@ COPY --from=builder /app/prisma ./prisma
 RUN corepack enable
 
 RUN pnpm install --prod
-RUN pnpm generate
 
 VOLUME /data
 
