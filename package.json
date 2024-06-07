@@ -5,14 +5,17 @@
 	"main": "dist/index.js",
 	"type": "module",
 	"license": "MIT",
+	"packageManager": "pnpm@9.0.0",
 	"scripts": {
 		"clean": "rimraf dist",
 		"start": "node .",
 		"start:env": "node --env-file=.env .",
+		"start:prod": "prisma migrate deploy && pnpm start",
 		"build": "pnpm run clean && tsc && tsc-alias",
 		"dev": "nodemon --exec \"pnpm run build && pnpm run start:env\" --watch src --ext ts",
 		"lint": "biome check src",
 		"lint:fix": "biome check --apply src",
+		"generate": "prisma generate",
 		"prepare": "husky || true"
 	},
 	"devDependencies": {
@@ -22,12 +25,12 @@
 		"@types/node": "^20.12.12",
 		"husky": "^9.0.11",
 		"nodemon": "^3.1.1",
-		"prisma": "^5.14.0",
 		"rimraf": "^5.0.7",
 		"tsc-alias": "^1.8.10",
 		"typescript": "^5.4.5"
 	},
 	"dependencies": {
+		"prisma": "^5.14.0",
 		"@prisma/client": "5.14.0",
 		"@sapphire/discord.js-utilities": "^7.2.1",
 		"@sapphire/framework": "^5.2.1",

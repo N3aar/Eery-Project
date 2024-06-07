@@ -26,6 +26,9 @@ importers:
       discord.js:
         specifier: 14.x
         version: 14.15.2
+      prisma:
+        specifier: ^5.14.0
+        version: 5.14.0
     devDependencies:
       '@biomejs/biome':
         specifier: 1.7.3
@@ -45,9 +48,6 @@ importers:
       nodemon:
         specifier: ^3.1.1
         version: 3.1.1
-      prisma:
-        specifier: ^5.14.0
-        version: 5.14.0
       rimraf:
         specifier: ^5.0.7
         version: 5.0.7
