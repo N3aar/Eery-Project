@@ -4,6 +4,7 @@ WORKDIR /app
 
 COPY package.json ./
 COPY pnpm-lock.yaml ./
+COPY prisma ./prisma
 
 RUN corepack enable
 
@@ -20,6 +21,7 @@ WORKDIR /app
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/pnpm-lock.yaml ./
 COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/prisma ./prisma
 
 RUN corepack enable
 
@@ -27,4 +29,4 @@ RUN pnpm install --prod
 
 VOLUME /data
 
-CMD ["pnpm", "start"]
+CMD ["pnpm", "start:prod"]

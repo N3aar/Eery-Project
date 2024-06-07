@@ -8,6 +8,7 @@ const sites = {
 	"https://www.tiktok.com/": "https://www.vxtiktok.com/",
 	"https://www.instagram.com/": "https://g.ddinstagram.com/",
 	"https://www.reddit.com/": "https://rxddit.com/",
+	"https://vm.tiktok.com/": "https://vm.vxtiktok.com/",
 };
 
 export default function urlHelper(message: Message) {

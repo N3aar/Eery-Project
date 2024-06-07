@@ -1,3 +1,5 @@
+import ExpHandler from "@/structures/xpHandler.js";
+import { PrismaClient } from "@prisma/client";
 import { SapphireClient, container } from "@sapphire/framework";
 import type { ClientOptions } from "discord.js";
 
@@ -21,11 +23,16 @@ export class Client extends SapphireClient {
 				throw new Error(`Failed to fetch: ${response.statusText}`);
 			return response.json();
 		};
+
+		container.db = new PrismaClient();
+		container.expHandler = new ExpHandler();
 	}
 }
 
 declare module "@sapphire/pieces" {
 	interface Container {
 		fetch: <T>(endpoint: string, options?: Partial<RequestInit>) => Promise<T>;
+		db: PrismaClient;
+		expHandler: ExpHandler;
 	}
 }

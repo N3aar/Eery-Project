@@ -1,4 +1,5 @@
 import emojiHelper from "@/events/emojiHelper.js";
+import giveXp from "@/events/giveXp.js";
 import urlHelper from "@/events/urlHelper.js";
 import { Listener } from "@sapphire/framework";
 import type { Message } from "discord.js";
@@ -19,5 +20,6 @@ export class MessageCreate extends Listener {
 
 		urlHelper(message);
 		emojiHelper(message);
+		giveXp(message);
 	}
 }
