@@ -1,6 +1,6 @@
-import type { GuildMember, Guild } from "discord.js";
 import { ExpValues } from "@/utils/contants.js";
 import { container } from "@sapphire/pieces";
+import type { Guild, GuildMember } from "discord.js";
 
 export type ExpStats = {
 	exp: number;

@@ -1,7 +1,7 @@
+import ExpHandler from "@/structures/xpHandler.js";
+import { PrismaClient } from "@prisma/client";
 import { SapphireClient, container } from "@sapphire/framework";
 import type { ClientOptions } from "discord.js";
-import { PrismaClient } from "@prisma/client";
-import ExpHandler from "@/structures/xpHandler.js";
 
 export class Client extends SapphireClient {
 	public constructor(options: ClientOptions) {
