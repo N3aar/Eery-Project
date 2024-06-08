@@ -18,8 +18,8 @@ export class MessageCreate extends Listener {
 	public run(message: Message) {
 		if (message.author.bot) return;
 
-		urlHelper(message);
 		emojiHelper(message);
 		giveXp(message);
+		urlHelper(message);
 	}
 }

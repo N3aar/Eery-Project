@@ -103,12 +103,12 @@ export default class ExpHandler {
 		return expMember.guilds.get(guild.id) ?? this.createExpStats();
 	}
 
-	public async getLeaderboard() {
+	public async getLeaderboard(max: number) {
 		return container.db.user.findMany({
 			orderBy: {
-				xp: "desc",
+				level: "desc",
 			},
-			take: 15,
+			take: Math.min(max, 25),
 		});
 	}
 
