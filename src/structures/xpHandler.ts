@@ -1,6 +1,6 @@
 import { ExpValues } from "@/utils/contants.js";
 import { container } from "@sapphire/pieces";
-import type { Guild, GuildMember } from "discord.js";
+import type { Guild, GuildMember, TextChannel } from "discord.js";
 
 export type ExpStats = {
 	exp: number;
@@ -53,7 +53,7 @@ export default class ExpHandler {
 		};
 	}
 
-	public async addExp(member: GuildMember, guild: Guild) {
+	public async addExp(member: GuildMember, guild: Guild, channel: TextChannel) {
 		const expStats = await this.getStats(member, guild);
 
 		if (!expStats?.canGetExp) return;
@@ -67,6 +67,9 @@ export default class ExpHandler {
 		if (expStats.exp >= xpRequired) {
 			expStats.level++;
 			expStats.exp = Math.max(newXp - xpRequired, 0);
+			channel.send(
+				`${member.toString()} subiu para o nível ${expStats.level}!`,
+			);
 		}
 
 		await container.db.user.upsert({

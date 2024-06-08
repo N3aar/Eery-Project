@@ -20,9 +20,9 @@ export function dateToCron(dateStr: string) {
 
 export function formatDate(date: DateObject): string {
 	const parts = [
-		String(date.day).padStart(2, "0"),
-		String(date.month).padStart(2, "0"),
-		String(date.year),
+		date.day ? String(date.day).padStart(2, "0") : undefined,
+		date.month ? String(date.month).padStart(2, "0") : undefined,
+		date.year ? String(date.year) : undefined,
 	].filter((part) => part);
 
 	return parts.join("/");
