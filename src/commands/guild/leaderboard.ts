@@ -15,7 +15,15 @@ export class LeaderboardCommand extends Command {
 		registry.registerChatInputCommand((builder) =>
 			builder
 				.setName("leaderboard")
-				.setDescription("Mostrar o ranking de nivel dos usuários"),
+				.setDescription("Mostrar o ranking de nivel dos usuários")
+				.addNumberOption((option) => {
+					option.setName("quantidade");
+					option.setDescription("quantas posições mostrar");
+					option.setRequired(false);
+					option.setMaxValue(25);
+					option.setMinValue(1);
+					return option;
+				}),
 		);
 	}
 
@@ -24,8 +32,10 @@ export class LeaderboardCommand extends Command {
 
 		if (!guild) return;
 
-		const leaderboard = await this.container.expHandler.getLeaderboard();
-		const levels = leaderboard.map((user) => `Nível ${user.level}`);
+		const quantity = interaction.options.getNumber("quantidade") ?? 10;
+		const leaderboard =
+			await this.container.expHandler.getLeaderboard(quantity);
+		const levels = leaderboard.map((user) => String(user.level));
 		const users = leaderboard.map((user, index) => {
 			const nickname =
 				guild.members.cache.get(user.discordId)?.displayName ??
