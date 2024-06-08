@@ -35,10 +35,7 @@ export class BannerCommand extends Command {
 
 		const nickname = member.displayName;
 		const color = member.displayColor;
-
-		const user = await this.container.fetch<{
-			banner?: string | null;
-		}>(`users/${member.id}`);
+		const user = await this.container.discordAPI.getUser(member.id);
 
 		const bannerHash = user.banner;
 
