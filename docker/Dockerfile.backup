@@ -1,0 +1,12 @@
+FROM alpine:latest
+
+RUN apk add --no-cache sqlite curl tzdata tar
+
+ENV TZ=America/Sao_Paulo
+
+COPY scripts/backup.sh /usr/local/bin/backup.sh
+COPY scripts/crontab /etc/crontabs/root
+
+RUN chmod +x /usr/local/bin/backup.sh
+
+CMD ["crond", "-f"]

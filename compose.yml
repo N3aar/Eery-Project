@@ -11,6 +11,18 @@ services:
     labels:
       - "com.centurylinklabs.watchtower.enable=true"
 
+  backup:
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile.backup
+    container_name: eery-backup
+    restart: always
+    volumes:
+      - eery-data:/data
+      - eery-backup:/backup
+    environment:
+      - DISCORD_BACKUP_WEBHOOK=${DISCORD_BACKUP_WEBHOOK}
+
   watchtower:
     image: containrrr/watchtower
     restart: always
@@ -24,4 +36,6 @@ services:
 
 volumes:
   eery-data:
+    external: false
+  eery-backup:
     external: false

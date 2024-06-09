@@ -5,8 +5,4 @@ services:
         required: false
     build:
       context: .
-      dockerfile: Dockerfile
-
-volumes:
-  eery-data:
-    external: false
+      dockerfile: ./docker/Dockerfile
