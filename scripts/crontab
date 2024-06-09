@@ -1,3 +1,2 @@
-# Execute the backup script every day at 00:00
-# 1 minute for testing purposes
-*/1 * * * * /usr/local/bin/backup.sh
+# Execute the backup script every hour
+* */1 * * * /usr/local/bin/backup.sh
