@@ -16,6 +16,11 @@ RUN pnpm build
 
 FROM node:20-alpine as runner
 
+ENV TZ America/Sao_Paulo
+
+RUN apk add --no-cache tzdata
+RUN ln -s /usr/share/zoneinfo/${TZ} /etc/localtime
+
 WORKDIR /app
 
 COPY --from=builder /app/package.json ./

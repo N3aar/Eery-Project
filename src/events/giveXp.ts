@@ -1,11 +1,12 @@
 import { container } from "@sapphire/pieces";
-import type { Message } from "discord.js";
+import type { Message, TextChannel } from "discord.js";
 
 export default function giveXp(message: Message) {
 	const member = message.member;
 	const guild = message.guild;
+	const channel = message.channel as TextChannel;
 
-	if (!member || !guild) return;
+	if (!member || !guild || !channel) return;
 
-	container.expHandler.addExp(member, guild);
+	container.expHandler.addExp(member, guild, channel);
 }

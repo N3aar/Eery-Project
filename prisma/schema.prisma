@@ -16,7 +16,7 @@ model User {
     xp        Int       @default(0) @map("xp")
     level     Int       @default(1) @map("level")
     birthday  DateTime? @map("birthday")
-    Events    Events[]  @relation("UserEvents")
+    events    Events[]  @relation("user_events")
     createdAt DateTime  @default(now()) @map("created_at")
     updatedAt DateTime  @updatedAt @map("updated_at")
 }
@@ -24,12 +24,14 @@ model User {
 model Events {
     id          String   @id @default(cuid()) @map("id")
     description String   @map("description")
-    date        DateTime @map("date")
+    month       Int      @map("month")
+    day         Int      @map("day")
+    type        String   @map("type")
     repeat      Boolean  @default(false) @map("repeat")
     guildId     String?  @map("guild_id")
-    Guild       Guild?   @relation("GuildEvents", fields: [guildId], references: [id])
+    guild       Guild?   @relation("guild_events", fields: [guildId], references: [id])
     createdBy   String?  @map("created_by")
-    User        User?    @relation("UserEvents", fields: [createdBy], references: [discordId])
+    user        User?    @relation("user_events", fields: [createdBy], references: [discordId])
     createdAt   DateTime @default(now()) @map("created_at")
     updatedAt   DateTime @updatedAt @map("updated_at")
 }
@@ -39,15 +41,15 @@ model Daily {
     day       Int     @default(0) @map("day")
     afternoon Int     @default(0) @map("afternoon")
     night     Int     @default(0) @map("night")
-    Guild     Guild[]
+    guild     Guild[]
 }
 
 model Guild {
     id          String   @id @default(cuid()) @map("id")
     discordId   String   @unique @map("discord_id")
     mainChannel String?  @map("main_channel")
-    Events      Events[] @relation("GuildEvents")
-    Daily       Daily?   @relation(fields: [dailyId], references: [id])
+    events      Events[] @relation("guild_events")
+    daily       Daily?   @relation(fields: [dailyId], references: [id])
     dailyId     String?  @map("daily_id")
     createdAt   DateTime @default(now()) @map("created_at")
     updatedAt   DateTime @updatedAt @map("updated_at")

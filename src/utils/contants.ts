@@ -3,6 +3,8 @@ export const EmbedColors = {
 	anilist: 0x3db4f2,
 };
 
+export const defaultTimeZone = "America/Sao_Paulo";
+
 export const leaderboardIcon = "https://i.imgur.com/qpb2q9S.png";
 
 export const leaderboardEmojis = ["🥇", "🥈", "🥉"];

@@ -1,8 +1,9 @@
 FROM alpine:latest
 
-RUN apk add --no-cache sqlite curl tzdata tar
+ENV TZ America/Sao_Paulo
 
-ENV TZ=America/Sao_Paulo
+RUN apk add --no-cache sqlite curl tzdata tar
+RUN ln -s /usr/share/zoneinfo/${TZ} /etc/localtime
 
 COPY scripts/backup.sh /usr/local/bin/backup.sh
 COPY scripts/crontab /etc/crontabs/root
