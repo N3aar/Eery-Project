@@ -36,11 +36,11 @@ export default async function announceScheduledEvent() {
 
 		if (channelMessages.has(channel.id)) {
 			const messages = channelMessages.get(channel.id)?.message;
-			messages?.push(`- ${event.description}`);
+			messages?.push(event.description);
 		} else {
 			channelMessages.set(channel.id, {
 				channel,
-				message: [`- ${event.description}`],
+				message: [event.description],
 			});
 		}
 
@@ -51,6 +51,8 @@ export default async function announceScheduledEvent() {
 
 	for (const channelMessage of channelMessages.values()) {
 		const channel = channelMessage.channel;
-		channel.send(`# Eventos\n${channelMessage.message.join("\n")}`);
+		channel.send(
+			`# Eventos\n${channelMessage.message.map((m) => `- ${m}`).join("\n")}`,
+		);
 	}
 }
