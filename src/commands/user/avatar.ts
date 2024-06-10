@@ -58,8 +58,6 @@ export class AvatarCommand extends Command {
 		};
 
 		const userType = interaction.options.getString("type");
-		const avatarType =
-			userType === "user" || !member.avatar ? "Usuário" : "Servidor";
 		const avatar =
 			userType === "user"
 				? member.user.displayAvatarURL(config)
@@ -68,7 +66,6 @@ export class AvatarCommand extends Command {
 		const embed = new EmbedBuilder()
 			.setTitle(nickname)
 			.setImage(avatar)
-			.setFooter({ text: avatarType })
 			.setColor(color);
 
 		await interaction.reply({

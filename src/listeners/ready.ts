@@ -1,3 +1,4 @@
+import startTimers from "@/events/startTimers.js";
 import { Listener } from "@sapphire/framework";
 import type { Client } from "discord.js";
 
@@ -13,5 +14,7 @@ export class ReadyListener extends Listener {
 		});
 	}
 
-	public run(client: Client) {}
+	public run(client: Client) {
+		startTimers();
+	}
 }
