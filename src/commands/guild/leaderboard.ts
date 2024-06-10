@@ -1,5 +1,5 @@
 import {
-	EmbedColors,
+	embedColors,
 	leaderboardEmojis,
 	leaderboardIcon,
 } from "@/utils/contants.js";
@@ -49,7 +49,7 @@ export class LeaderboardCommand extends Command {
 				name: `Top ${users.length} Níveis`,
 				iconURL: leaderboardIcon,
 			})
-			.setColor(EmbedColors.default)
+			.setColor(embedColors.default)
 			.addFields([
 				{
 					name: "Usuário",

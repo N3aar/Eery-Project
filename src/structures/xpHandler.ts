@@ -1,4 +1,4 @@
-import { ExpValues } from "@/utils/contants.js";
+import { expValues } from "@/utils/contants.js";
 import { container } from "@sapphire/pieces";
 import type { Guild, GuildMember, TextChannel } from "discord.js";
 
@@ -36,7 +36,7 @@ export default class ExpHandler {
 	}
 
 	private getRequiredExpAmount(level: number): number {
-		return Math.floor(ExpValues.xpBase * ExpValues.xpFactor ** level);
+		return Math.floor(expValues.xpBase * expValues.xpFactor ** level);
 	}
 
 	private async fetchUserStats(member: GuildMember): Promise<ExpStats> {
@@ -58,7 +58,7 @@ export default class ExpHandler {
 
 		if (!expStats?.canGetExp) return;
 
-		expStats.exp += ExpValues.byMessage;
+		expStats.exp += expValues.byMessage;
 		expStats.canGetExp = false;
 
 		const newXp = expStats.exp;
@@ -93,7 +93,7 @@ export default class ExpHandler {
 
 		setTimeout(() => {
 			expStats.canGetExp = true;
-		}, ExpValues.cooldown);
+		}, expValues.cooldown);
 	}
 
 	public async getStats(member: GuildMember, guild: Guild): Promise<ExpStats> {
