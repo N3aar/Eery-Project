@@ -34,8 +34,12 @@ export class BirthdayCommand extends Command {
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const guild = interaction.guild;
 		const member = interaction.member as GuildMember;
+		const day = interaction.options.getNumber("dia");
+		const month = interaction.options.getNumber("mes");
 
-		if (!guild || !member) return;
+		if (!guild || !member || !day || !month) return;
+
+		const birthdayDate = new Date(new Date().getFullYear(), month, day);
 
 		const guildData = await this.container.db.guild.findUnique({
 			where: {
@@ -48,54 +52,51 @@ export class BirthdayCommand extends Command {
 
 		if (!guildData) return;
 
-		const day = interaction.options.getNumber("dia");
-		const month = interaction.options.getNumber("mes");
-
-		if (!day || !month) return;
-
-		const birthdayDate = new Date(new Date().getFullYear(), month, day);
-
-		await this.container.db.user.upsert({
-			where: {
-				discordId: member.id,
-			},
-			update: {
-				birthday: birthdayDate,
-			},
-			create: {
-				discordId: member.id,
-				birthday: birthdayDate,
-			},
-		});
-
-		const eventData = await this.container.db.events.findFirst({
-			where: {
-				type: eventTypes.birthday,
-				createdBy: member.id,
-			},
-			select: {
-				id: true,
-			},
-		});
-
-		if (eventData?.id) {
-			await this.container.db.events.update({
-				where: { id: eventData.id },
-				data: { day, month },
-			});
-		} else {
-			await this.container.db.events.create({
-				data: {
-					description: "",
-					day: day,
-					month: month,
-					repeat: true,
-					type: eventTypes.birthday,
-					createdBy: member.id,
-					guildId: guildData.id,
+		await this.container.db.$transaction(async (prisma) => {
+			const guildData = await prisma.user.upsert({
+				where: {
+					discordId: member.id,
+				},
+				update: {
+					birthday: birthdayDate,
+				},
+				create: {
+					discordId: member.id,
+					birthday: birthdayDate,
 				},
 			});
-		}
+
+			if (!guildData) throw new Error("Guild not found");
+
+			const eventData = await prisma.events.findFirst({
+				where: {
+					type: eventTypes.birthday,
+					createdBy: member.id,
+				},
+				select: {
+					id: true,
+				},
+			});
+
+			if (eventData?.id) {
+				await prisma.events.update({
+					where: { id: eventData.id },
+					data: { day, month },
+				});
+			} else {
+				await prisma.events.create({
+					data: {
+						description: "",
+						day: day,
+						month: month,
+						repeat: true,
+						type: eventTypes.birthday,
+						createdBy: member.id,
+						guildId: guildData.id,
+					},
+				});
+			}
+		});
 
 		await interaction.reply({
 			content: "Aniversário definido com sucesso!",
