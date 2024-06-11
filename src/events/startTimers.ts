@@ -4,7 +4,7 @@ import announceScheduledEvent from "./announceScheduledEvent.js";
 
 export default function startTimers() {
 	new CronJob(
-		"* * * * *",
+		"0 0 * * *",
 		() => {
 			announceScheduledEvent();
 		},

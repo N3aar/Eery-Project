@@ -1,4 +1,5 @@
 import startTimers from "@/events/startTimers.js";
+import { ensureGuilds } from "@/shared/db/ensureGuilds.js";
 import { Listener } from "@sapphire/framework";
 import type { Client } from "discord.js";
 
@@ -15,6 +16,7 @@ export class ReadyListener extends Listener {
 	}
 
 	public run(client: Client) {
+		ensureGuilds(Array.from(client.guilds.cache.values()));
 		startTimers();
 	}
 }
