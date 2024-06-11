@@ -59,7 +59,7 @@ export class SetBirthdayCommand extends Command {
 
 		if (!user || !day || !month) return;
 
-		const birthdayDate = new Date(2024, day, month);
+		const birthdayDate = new Date(new Date().getFullYear(), month, day);
 
 		await this.container.db.user.upsert({
 			where: {
