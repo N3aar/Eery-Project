@@ -43,11 +43,7 @@ export default async function sendGoodMorningImage(
 
 				if (!imageUrl || !channel) return;
 
-				console.log(period);
-				console.log(daily);
-
 				const updatedDaily = updateDailyData(period, daily);
-				console.log(updatedDaily);
 
 				await container.db.daily.update({
 					where: {
