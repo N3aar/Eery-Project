@@ -37,7 +37,7 @@ export default class ExpHandler {
 	}
 
 	private getRequiredExpAmount(level: number): number {
-		return 5 * (level ^ 2) + 50 * level + 100;
+		return 5 * level ** 2 + 50 * level + 100;
 	}
 
 	private async fetchUserStats(member: GuildMember): Promise<ExpStats> {
