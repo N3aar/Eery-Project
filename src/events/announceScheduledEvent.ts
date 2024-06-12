@@ -1,9 +1,15 @@
+import { birthdayVideos } from "@/utils/contants.js";
+import { getRandomNumber } from "@/utils/random.js";
 import { container } from "@sapphire/pieces";
-import type { TextChannel } from "discord.js";
+import type { MessageCreateOptions, TextChannel } from "discord.js";
 
 type ChannelMessage = {
 	channel: TextChannel;
-	message: string[];
+	events: {
+		type: string;
+		description: string;
+		createdBy: string;
+	}[];
 };
 
 export default async function announceScheduledEvent() {
@@ -12,7 +18,6 @@ export default async function announceScheduledEvent() {
 		where: {
 			month: today.getMonth() + 1,
 			day: today.getDate(),
-			type: "DEFAULT",
 		},
 		include: {
 			guild: true,
@@ -35,12 +40,22 @@ export default async function announceScheduledEvent() {
 		if (!channel || !guild) continue;
 
 		if (channelMessages.has(channel.id)) {
-			const messages = channelMessages.get(channel.id)?.message;
-			messages?.push(event.description);
+			const events = channelMessages.get(channel.id)?.events;
+			events?.push({
+				description: event.description,
+				type: event.type,
+				createdBy: event.createdBy ?? "",
+			});
 		} else {
 			channelMessages.set(channel.id, {
 				channel,
-				message: [event.description],
+				events: [
+					{
+						description: event.description,
+						type: event.type,
+						createdBy: event.createdBy ?? "",
+					},
+				],
 			});
 		}
 
@@ -51,8 +66,36 @@ export default async function announceScheduledEvent() {
 
 	for (const channelMessage of channelMessages.values()) {
 		const channel = channelMessage.channel;
-		channel.send(
-			`# Eventos\n${channelMessage.message.map((m) => `- ${m}`).join("\n")}`,
-		);
+		const eventsMsg = channelMessage.events
+			.filter((event) => event.type === "DEFAULT")
+			.map((event) => `- ${event.description}`);
+
+		const birthdayUsers = channelMessage.events
+			.filter((event) => event.type === "BIRTHDAY" && event.createdBy)
+			.map((event) => `<@${event.createdBy}>`);
+
+		const formatedMessages = [
+			`${eventsMsg.length > 0 ? `# Eventos\n${eventsMsg.join("\n")}` : ""}`,
+			`${birthdayUsers.join(" & ")}, Feliz Aniversário! :partying_face: :tada:`,
+		];
+
+		const message: MessageCreateOptions = {
+			content: formatedMessages.join("\n\n"),
+		};
+
+		if (birthdayUsers.length > 0) {
+			const random =
+				birthdayVideos[getRandomNumber(0, birthdayVideos.length - 1)];
+
+			message.files = [
+				{
+					attachment: random,
+					name: "happy_birthday.mp4",
+					description: "Happy Birthday",
+				},
+			];
+		}
+
+		channel.send(message);
 	}
 }

@@ -1,5 +1,5 @@
 import type { Media, MediaType } from "@/shared/types/anilistTypes.js";
-import { EmbedColors } from "@/utils/contants.js";
+import { embedColors } from "@/utils/contants.js";
 import { formatDate } from "@/utils/dateFormat.js";
 import { pascal, replaceUnderlines } from "@/utils/stringFormat.js";
 import { Command } from "@sapphire/framework";
@@ -141,7 +141,7 @@ export class AnilistCommand extends Command {
 			.setThumbnail(large)
 			.setDescription(animeDescription)
 			.addFields(fields)
-			.setColor(EmbedColors.anilist);
+			.setColor(embedColors.anilist);
 	}
 
 	private createAnimeDetailedEmbed(data: Media) {
@@ -300,6 +300,6 @@ export class AnilistCommand extends Command {
 			.setThumbnail(large)
 			.setDescription(animeDescription.join("\n"))
 			.addFields(fields)
-			.setColor(EmbedColors.anilist);
+			.setColor(embedColors.anilist);
 	}
 }

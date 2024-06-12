@@ -8,3 +8,7 @@ export function pascal(text: string) {
 export function replaceUnderlines(text: string, replacer = " ") {
 	return text?.replaceAll("_", replacer);
 }
+
+export function pad(number: number) {
+	return String(number).padStart(2, "0");
+}

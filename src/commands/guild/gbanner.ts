@@ -1,4 +1,4 @@
-import { EmbedColors } from "@/utils/contants.js";
+import { embedColors } from "@/utils/contants.js";
 import { Command } from "@sapphire/framework";
 import { EmbedBuilder, type ImageURLOptions } from "discord.js";
 
@@ -36,7 +36,7 @@ export class GuildBannerCommand extends Command {
 		const embed = new EmbedBuilder()
 			.setTitle(guild.name)
 			.setImage(guildIcon)
-			.setColor(EmbedColors.default);
+			.setColor(embedColors.default);
 
 		await interaction.reply({
 			embeds: [embed],
