@@ -1,4 +1,5 @@
 import { expValues } from "@/utils/contants.js";
+import { getRandomNumber } from "@/utils/random.js";
 import { container } from "@sapphire/pieces";
 import type { Guild, GuildMember, TextChannel } from "discord.js";
 
@@ -36,7 +37,7 @@ export default class ExpHandler {
 	}
 
 	private getRequiredExpAmount(level: number): number {
-		return Math.floor(expValues.xpBase * expValues.xpFactor ** level);
+		return 5 * (level ^ 2) + 50 * level + 100;
 	}
 
 	private async fetchUserStats(member: GuildMember): Promise<ExpStats> {
@@ -53,12 +54,16 @@ export default class ExpHandler {
 		};
 	}
 
+	public deleteMemberFromCache(id: string) {
+		this.users.delete(id);
+	}
+
 	public async addExp(member: GuildMember, guild: Guild, channel: TextChannel) {
 		const expStats = await this.getStats(member, guild);
 
 		if (!expStats?.canGetExp) return;
 
-		expStats.exp += expValues.byMessage;
+		expStats.exp += getRandomNumber(expValues.min, expValues.max);
 		expStats.canGetExp = false;
 
 		const newXp = expStats.exp;
@@ -119,6 +124,7 @@ export default class ExpHandler {
 		const requiredExp = this.getRequiredExpAmount(level);
 		const progress = Math.floor((exp / requiredExp) * length);
 		const bar = "▰".repeat(progress) + "▱".repeat(length - progress);
-		return `[${bar}] ${exp}/${requiredExp}`;
+
+		return `${bar} ${exp}/${requiredExp}`;
 	}
 }
