@@ -27,15 +27,11 @@ export class ChannelCommand extends Command {
 
 		if (!guild || !channel) return;
 
-		await this.container.db.guild.upsert({
+		await this.container.db.guild.update({
 			where: {
 				discordId: guild.id,
 			},
-			update: {
-				mainChannel: channel.id,
-			},
-			create: {
-				discordId: guild.id,
+			data: {
 				mainChannel: channel.id,
 			},
 		});

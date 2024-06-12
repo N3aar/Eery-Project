@@ -73,7 +73,7 @@ export class EventCommand extends Command {
 				day: day,
 				month: month,
 				repeat: repeat,
-				type: eventTypes.default,
+				type: eventTypes.DEFAULT,
 				createdBy: member.id,
 				guildId: guildData.id,
 			},

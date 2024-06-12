@@ -38,7 +38,7 @@ export class EventsCommand extends Command {
 				guild: {
 					discordId: guild.id,
 				},
-				type: eventTypes.default,
+				type: eventTypes.DEFAULT,
 			},
 			include: {
 				user: true,
