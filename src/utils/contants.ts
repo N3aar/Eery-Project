@@ -32,11 +32,11 @@ export const birthdayVideos = [
 	"https://utfs.io/f/d82a891f-54b2-4322-aaa2-618b3ebf3cde-z56zz.mp4",
 	"https://utfs.io/f/8f15b466-6ac0-418d-91e5-3a1ad8a4866a-z5700.mp4",
 	"https://utfs.io/f/50ff0549-c66c-49c2-8d78-91002251b4a0-z5701.mp4",
+	"https://utfs.io/f/d5265906-9676-48a0-8a1e-8bb5e7f69826-z5702.mp4",
 ];
 
 export const expValues = {
-	byMessage: 3,
-	xpBase: 25,
-	xpFactor: 1.5,
+	min: 10,
+	max: 25,
 	cooldown: 60 * 1000,
 };
