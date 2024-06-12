@@ -39,7 +39,7 @@ export class BirthdayCommand extends Command {
 
 		if (!guild || !member || !day || !month) return;
 
-		const birthdayDate = new Date(new Date().getFullYear(), month, day);
+		const birthdayDate = new Date(new Date().getFullYear(), month - 1, day);
 
 		const guildData = await this.container.db.guild.findUnique({
 			where: {
