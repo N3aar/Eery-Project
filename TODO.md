@@ -7,4 +7,4 @@ TODO:
 - [x] Emoji fix (send webhook with content menssage and replace the emoj if the user does't have nitro)
 - [x] Anilist Command
 - [X] Events and Birthday announced
-- [ ] Good Morning Daily
+- [X] Good Morning Daily
