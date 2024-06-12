@@ -23,7 +23,7 @@ export class ChannelCommand extends Command {
 
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const guild = interaction.guild;
-		const channel = interaction.options.getChannel("channel");
+		const channel = interaction.options.getChannel("canal");
 
 		if (!guild || !channel) return;
 

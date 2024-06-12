@@ -6,7 +6,6 @@ export class BirthdayCommand extends Command {
 	public constructor(context: Command.LoaderContext, options: Command.Options) {
 		super(context, { ...options });
 	}
-
 	public override registerApplicationCommands(registry: Command.Registry) {
 		registry.registerChatInputCommand((builder) =>
 			builder
@@ -30,7 +29,6 @@ export class BirthdayCommand extends Command {
 				}),
 		);
 	}
-
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const guild = interaction.guild;
 		const member = interaction.member as GuildMember;
@@ -41,19 +39,19 @@ export class BirthdayCommand extends Command {
 
 		const birthdayDate = new Date(new Date().getFullYear(), month - 1, day);
 
-		const guildData = await this.container.db.guild.findUnique({
-			where: {
-				discordId: guild.id,
-			},
-			select: {
-				id: true,
-			},
-		});
-
-		if (!guildData) return;
-
 		await this.container.db.$transaction(async (prisma) => {
-			const guildData = await prisma.user.upsert({
+			const guildData = await prisma.guild.findUnique({
+				where: {
+					discordId: guild.id,
+				},
+				select: {
+					id: true,
+				},
+			});
+
+			if (!guildData) throw new Error("Guild not found");
+
+			await prisma.user.upsert({
 				where: {
 					discordId: member.id,
 				},
@@ -65,8 +63,6 @@ export class BirthdayCommand extends Command {
 					birthday: birthdayDate,
 				},
 			});
-
-			if (!guildData) throw new Error("Guild not found");
 
 			const eventData = await prisma.events.findFirst({
 				where: {
