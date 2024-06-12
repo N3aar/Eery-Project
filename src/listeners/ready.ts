@@ -16,7 +16,7 @@ export class ReadyListener extends Listener {
 	}
 
 	public run(client: Client) {
-		ensureGuilds(Array.from(client.guilds.cache.values()));
+		ensureGuilds(client.guilds.cache);
 		startTimers();
 	}
 }
