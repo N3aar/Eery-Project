@@ -1,7 +1,7 @@
 import type { Media, MediaType } from "@/shared/types/anilistTypes.js";
 import { embedColors } from "@/utils/contants.js";
 import { formatDate } from "@/utils/dateFormat.js";
-import { pascal, replaceUnderlines } from "@/utils/stringFormat.js";
+import { capitalize, replaceUnderlines } from "@/utils/stringFormat.js";
 import { Command } from "@sapphire/framework";
 import { type APIEmbedField, EmbedBuilder, type TextChannel } from "discord.js";
 
@@ -106,7 +106,7 @@ export class AnilistCommand extends Command {
 		if (status) {
 			fields.push({
 				name: "Status",
-				value: pascal(replaceUnderlines(status)),
+				value: capitalize(replaceUnderlines(status)),
 				inline: true,
 			});
 		}
@@ -195,7 +195,7 @@ export class AnilistCommand extends Command {
 		if (format) {
 			fields.push({
 				name: "Format",
-				value: pascal(replaceUnderlines(format)),
+				value: capitalize(replaceUnderlines(format)),
 				inline: true,
 			});
 		}
@@ -203,7 +203,7 @@ export class AnilistCommand extends Command {
 		if (status) {
 			fields.push({
 				name: "Status",
-				value: pascal(replaceUnderlines(status)),
+				value: capitalize(replaceUnderlines(status)),
 				inline: true,
 			});
 		}
@@ -219,7 +219,7 @@ export class AnilistCommand extends Command {
 		if (source) {
 			fields.push({
 				name: "Source",
-				value: pascal(source),
+				value: capitalize(source),
 				inline: true,
 			});
 		}
@@ -227,7 +227,7 @@ export class AnilistCommand extends Command {
 		if (season) {
 			fields.splice(6, 0, {
 				name: "Season",
-				value: pascal(season),
+				value: capitalize(season),
 				inline: true,
 			});
 		}
