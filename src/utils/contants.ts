@@ -11,10 +11,16 @@ export const leaderboardIcon = "https://i.imgur.com/qpb2q9S.png";
 
 export const leaderboardEmojis = ["🥇", "🥈", "🥉"];
 
-export const eventTypes = {
-	default: "DEFAULT",
-	birthday: "BIRTHDAY",
-};
+export enum eventTypes {
+	DEFAULT = "DEFAULT",
+	BIRTHDAY = "BIRTHDAY",
+}
+
+export enum periods {
+	MORNING = "MORNING",
+	AFTERNOON = "AFTERNOON",
+	NIGHT = "NIGHT",
+}
 
 export const urlFixers = {
 	"https://www.youtube.com/shorts/": "https://youtu.be/",

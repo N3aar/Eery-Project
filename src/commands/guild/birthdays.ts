@@ -37,7 +37,7 @@ export class BirthdayCommand extends Command {
 				guild: {
 					discordId: guild.id,
 				},
-				type: eventTypes.birthday,
+				type: eventTypes.BIRTHDAY,
 				month: month ?? undefined,
 			},
 			include: {

@@ -14,6 +14,9 @@ export function ensureGuild(guild: Guild) {
 		update: {},
 		create: {
 			discordId: guild.id,
+			daily: {
+				create: {},
+			},
 		},
 	});
 }

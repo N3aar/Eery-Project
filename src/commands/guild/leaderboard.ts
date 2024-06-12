@@ -35,13 +35,10 @@ export class LeaderboardCommand extends Command {
 		const quantity = interaction.options.getNumber("quantidade") ?? 10;
 		const leaderboard =
 			await this.container.expHandler.getLeaderboard(quantity);
+
 		const levels = leaderboard.map((user) => String(user.level));
 		const users = leaderboard.map((user, index) => {
-			const nickname =
-				guild.members.cache.get(user.discordId)?.displayName ??
-				"Não Encontrado";
-
-			return `${leaderboardEmojis[index] ?? `${index + 1}.`} ${nickname}`;
+			return `${leaderboardEmojis[index] ?? `${index + 1}.`} <@${user.id}>`;
 		});
 
 		const embed = new EmbedBuilder()

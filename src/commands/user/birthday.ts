@@ -66,7 +66,7 @@ export class BirthdayCommand extends Command {
 
 			const eventData = await prisma.events.findFirst({
 				where: {
-					type: eventTypes.birthday,
+					type: eventTypes.BIRTHDAY,
 					createdBy: member.id,
 				},
 				select: {
@@ -86,7 +86,7 @@ export class BirthdayCommand extends Command {
 						day: day,
 						month: month,
 						repeat: true,
-						type: eventTypes.birthday,
+						type: eventTypes.BIRTHDAY,
 						createdBy: member.id,
 						guildId: guildData.id,
 					},

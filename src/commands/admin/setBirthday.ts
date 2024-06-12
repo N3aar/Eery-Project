@@ -76,7 +76,7 @@ export class SetBirthdayCommand extends Command {
 
 		const eventData = await this.container.db.events.findFirst({
 			where: {
-				type: eventTypes.birthday,
+				type: eventTypes.BIRTHDAY,
 				createdBy: user.id,
 			},
 			select: {
@@ -96,7 +96,7 @@ export class SetBirthdayCommand extends Command {
 					day: day,
 					month: month,
 					repeat: true,
-					type: eventTypes.birthday,
+					type: eventTypes.BIRTHDAY,
 					createdBy: user.id,
 					guildId: guildData.id,
 				},
