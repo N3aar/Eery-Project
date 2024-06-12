@@ -42,6 +42,25 @@ export const birthdayVideos = [
 	"https://utfs.io/f/5f2da89f-cffd-42f3-bee6-1320e907f68a-z5703.mp4",
 ];
 
+export const greetings = [
+	"bom dia",
+	"boa tarde",
+	"boa noite",
+	"feliz natal",
+	"feliz ano novo",
+];
+
+export const timeRanges = {
+	morning: { start: 6, end: 11 },
+	afternoon: { start: 12, end: 18 },
+	night: { start: 19, end: 5 },
+};
+
+export const specialDates = {
+	christmas: { day: 25, month: 12 },
+	newYear: { day: 1, month: 1 },
+};
+
 export const expValues = {
 	min: 10,
 	max: 25,
