@@ -45,6 +45,15 @@ export class BirthdayCommand extends Command {
 			},
 		});
 
+		if (!birthdays || birthdays.length <= 0) {
+			await interaction.reply({
+				content: "Não há aniversários neste mês!",
+				ephemeral: false,
+				fetchReply: false,
+			});
+			return;
+		}
+
 		const monthStatus = month ? `Mês ${pad(month)}` : "";
 		const birthdayList = birthdays.map(
 			(event) =>
