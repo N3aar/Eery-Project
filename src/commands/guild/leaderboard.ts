@@ -38,7 +38,9 @@ export class LeaderboardCommand extends Command {
 
 		const levels = leaderboard.map((user) => String(user.level));
 		const users = leaderboard.map((user, index) => {
-			return `${leaderboardEmojis[index] ?? `${index + 1}.`} <@${user.id}>`;
+			return `${leaderboardEmojis[index] ?? `${index + 1}.`} <@${
+				user.discordId
+			}>`;
 		});
 
 		const embed = new EmbedBuilder()
