@@ -1,0 +1,110 @@
+#!/usr/bin/env node
+
+import * as tar from 'tar';
+import { createWriteStream, mkdir, unlink, existsSync } from 'node:fs';
+import { pipeline } from 'stream';
+import { promisify } from 'node:util';
+import { resolve, dirname } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { tmpdir } from 'node:os';
+
+const streamPipeline = promisify(pipeline);
+const tempPath = tmpdir();
+const __dirname = dirname(fileURLToPath(import.meta.url));
+
+const BACKUP_CHANNEL_ID = process.env.BACKUP_CHANNEL_ID;
+const pathToExtract = `${process.cwd()}/prisma`;
+const fileName = 'db.sqlite'
+
+const throwError = (message) => {
+    console.error(message);
+    process.exit(1);
+}
+
+console.log('Pulling backup from Discord...');
+
+const fileUrl = await fetch(`https://discord.com/api/v10/channels/${BACKUP_CHANNEL_ID}/messages`, {
+    headers: {
+        Authorization: `Bot ${process.env.TOKEN}`,
+    },
+})
+    .then((res) => {
+        if (!res.ok) {
+            throw new Error(`Failed to fetch backup URL: ${res.statusText}`);
+        }
+
+        return res.json();
+    })
+    .then((data) => {
+        const message = data.find((message) => message.attachments.length > 0);
+        if (!message) {
+            throw new Error('No backup URL found');
+        }
+
+        const attachment = message.attachments[0]
+        if (!attachment) {
+            throw new Error('No backup URL found');
+        }
+
+        return attachment.url;
+    })
+    .catch((err) => {
+        throwError(`Failed to fetch backup URL: ${err}`);
+    });
+
+if (!fileUrl) {
+    throwError('No backup URL found');
+}
+
+const tarballPath = resolve(tempPath, 'backup.tar.gz');
+const extractPath = resolve(__dirname, pathToExtract);
+const jornalPath = resolve(extractPath, `${fileName}-jornal`);
+
+console.log(`Downloading backup from:\n${fileUrl.split('?')[0]}\n`);
+
+await fetch(fileUrl)
+    .then((res) => {
+        if (!res.ok) {
+            throw new Error(`Failed to download backup: ${res.statusText}`);
+        }
+
+        return res.body
+    })
+    .then((body) => {
+        const writeStream = createWriteStream(tarballPath);
+        return streamPipeline(body, writeStream);
+    })
+    .catch((err) => {
+        throwError(`Failed to download backup: ${err}`);
+    });
+
+console.log(`Extracting backup to:\n${extractPath}\n`);
+
+await mkdir(extractPath, { recursive: true }, (err) => {
+    if (err) {
+        throwError(`Failed to create backup directory: ${err}`);
+    }
+});
+
+await tar.extract({
+    file: tarballPath,
+    cwd: extractPath,
+    strip: 1,
+    filter: (path) => path.endsWith(fileName),
+})
+
+await unlink(tarballPath, (err) => {
+    if (err) {
+        throwError(`Failed to delete tarball: ${err}`);
+    }
+});
+
+if (existsSync(jornalPath)) {
+    await unlink(jornalPath, (err) => {
+        if (err) {
+            throwError(`Failed to delete jornal file: ${err}`);
+        }
+    });
+}
+
+console.log('Backup extracted successfully!\n');
