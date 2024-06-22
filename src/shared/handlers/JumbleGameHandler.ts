@@ -383,7 +383,7 @@ export default class JumbleGameHandler {
 		const artist = gameContext.artistName;
 		const passed = Date.now() - gameContext.started;
 		const seconds = Number.parseFloat((passed / 1000).toFixed(1));
-		const description = `${winnerName} acertou! A resposta foi \`${artist}\``;
+		const description = `**${winnerName}** acertou! A resposta foi \`${artist}\``;
 
 		const userData = await container.db.user.findUnique({
 			where: { discordId: winnerId },

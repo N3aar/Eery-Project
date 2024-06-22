@@ -1,5 +1,6 @@
 import { type AccentKey, accents } from "./contants.js";
 import { shuffle } from "./random.js";
+import levenshtein from "js-levenshtein";
 
 export function capitalize(text: string) {
 	return text
@@ -33,4 +34,10 @@ export function removeAccents(input: string) {
 		.split("")
 		.map((char) => accents[char as AccentKey] || char)
 		.join("");
+}
+
+export function calculateSimilarity(from: string, to: string): number {
+	const distance = levenshtein(from, to);
+	const maxLength = Math.max(from.length, to.length);
+	return 1 - distance / maxLength;
 }

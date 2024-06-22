@@ -17,6 +17,7 @@ export const leaderboardEmojis = ["🥇", "🥈", "🥉"];
 export const emojis = {
 	error: "❌",
 	success: "✅",
+	close: "🤏",
 };
 
 export enum eventTypes {
