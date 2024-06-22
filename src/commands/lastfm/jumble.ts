@@ -154,6 +154,17 @@ export class JumbleCommand extends Command {
 			message,
 			embed,
 		);
+
+		await this.container.db.jumble.update({
+			where: {
+				id: userStats.id,
+			},
+			data: {
+				plays: {
+					increment: 1,
+				},
+			},
+		});
 	}
 
 	private chooseRandomArtist(artists: UserArtistData[]) {

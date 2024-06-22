@@ -265,6 +265,30 @@ export default class JumbleGameHandler {
 		}
 	}
 
+	private async addPoints(userId: string, points: number) {
+		await container.db.jumble.update({
+			where: {
+				userId: userId,
+			},
+			data: {
+				points: {
+					increment: points,
+				},
+			},
+		});
+	}
+
+	private async setBestTime(userId: string, time: number) {
+		await container.db.jumble.update({
+			where: {
+				userId: userId,
+			},
+			data: {
+				bestTime: time,
+			},
+		});
+	}
+
 	private async addHint(gameContext: JumbleGameContext) {
 		const defaultHintsCount = 3;
 		const hintsCount = gameContext.additionalHints + defaultHintsCount;
@@ -358,8 +382,26 @@ export default class JumbleGameHandler {
 
 		const artist = gameContext.artistName;
 		const passed = Date.now() - gameContext.started;
-		const seconds = (passed / 1000).toFixed(1);
+		const seconds = Number.parseFloat((passed / 1000).toFixed(1));
 		const description = `${winnerName} acertou! A resposta foi \`${artist}\``;
+
+		const userData = await container.db.user.findUnique({
+			where: { discordId: winnerId },
+			select: {
+				id: true,
+				Jumble: true,
+			},
+		});
+
+		if (!userData || !userData.Jumble) return;
+
+		await this.addPoints(userData.id, 1);
+
+		const bestTime = userData.Jumble.bestTime;
+
+		if (seconds > bestTime) {
+			await this.setBestTime(userData.id, seconds);
+		}
 
 		gameContext.status = JumbleStatus.WINNER;
 

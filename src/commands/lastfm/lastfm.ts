@@ -1,4 +1,4 @@
-import { embedColors, eventTypes } from "@/utils/contants.js";
+import { embedColors } from "@/utils/contants.js";
 import { Command } from "@sapphire/framework";
 import { EmbedBuilder, type GuildMember } from "discord.js";
 
