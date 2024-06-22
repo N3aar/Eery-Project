@@ -1,6 +1,6 @@
+import levenshtein from "js-levenshtein";
 import { type AccentKey, accents } from "./contants.js";
 import { shuffle } from "./random.js";
-import levenshtein from "js-levenshtein";
 
 export function capitalize(text: string) {
 	return text

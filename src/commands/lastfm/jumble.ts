@@ -55,7 +55,7 @@ export class JumbleCommand extends Command {
 		}
 
 		const username = userStats.lastfmUser;
-		if (!username) {
+		if (!username || username.length <= 0) {
 			const embed = new EmbedBuilder()
 				.setDescription(
 					"Use o comando /lastfm para registrar sua conta antes de jogar.",
