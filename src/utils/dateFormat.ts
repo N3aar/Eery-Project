@@ -27,3 +27,8 @@ export function formatDate(date: DateObject): string {
 
 	return parts.join("/");
 }
+
+export function convertToDiscordTimestamp(date: string): string {
+	const timestamp = Math.floor(new Date(date).getTime() / 1000);
+	return `<t:${timestamp}:D>`;
+}

@@ -1,6 +1,9 @@
 export const embedColors = {
-	default: 0xfc3a3a,
+	default: 0xed3939,
 	anilist: 0x3db4f2,
+	playing: 0x4488ff,
+	error: 0xf9576a,
+	success: 0x1ed762,
 };
 
 export const adminPermission = 8;
@@ -10,6 +13,11 @@ export const defaultTimeZone = "America/Sao_Paulo";
 export const leaderboardIcon = "https://i.imgur.com/qpb2q9S.png";
 
 export const leaderboardEmojis = ["🥇", "🥈", "🥉"];
+
+export const emojis = {
+	error: "❌",
+	success: "✅",
+};
 
 export enum eventTypes {
 	DEFAULT = "DEFAULT",
@@ -50,6 +58,15 @@ export const greetings = [
 	"feliz ano novo",
 ];
 
+export const translations = {
+	group: "grupo",
+	person: "pessoa",
+	male: "masculino",
+	female: "feminino",
+};
+
+export type TranslationKey = keyof typeof translations;
+
 export const timeRanges = {
 	morning: { start: 6, end: 11 },
 	afternoon: { start: 12, end: 18 },
@@ -66,3 +83,56 @@ export const expValues = {
 	max: 25,
 	cooldown: 60 * 1000,
 };
+
+export const accents = {
+	á: "a",
+	à: "a",
+	ã: "a",
+	â: "a",
+	ä: "a",
+	Á: "A",
+	À: "A",
+	Ã: "A",
+	Â: "A",
+	Ä: "A",
+	é: "e",
+	è: "e",
+	ê: "e",
+	ë: "e",
+	É: "E",
+	È: "E",
+	Ê: "E",
+	Ë: "E",
+	í: "i",
+	ì: "i",
+	î: "i",
+	ï: "i",
+	Í: "I",
+	Ì: "I",
+	Î: "I",
+	Ï: "I",
+	ó: "o",
+	ò: "o",
+	õ: "o",
+	ô: "o",
+	ö: "o",
+	Ó: "O",
+	Ò: "O",
+	Õ: "O",
+	Ô: "O",
+	Ö: "O",
+	ú: "u",
+	ù: "u",
+	û: "u",
+	ü: "u",
+	Ú: "U",
+	Ù: "U",
+	Û: "U",
+	Ü: "U",
+	ç: "c",
+	Ç: "C",
+	ñ: "n",
+	Ñ: "N",
+};
+
+export type AccentKey = keyof typeof accents;

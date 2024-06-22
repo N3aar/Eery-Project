@@ -3,7 +3,7 @@ import type { DiscordUser } from "../types/discordTypes.js";
 
 export default class DiscordAPI extends BaseRequest {
 	constructor() {
-		super("https://discord.com/api/v10/", {
+		super("https://discord.com/api/v10", {
 			headers: {
 				"Content-Type": "application/json",
 				Authorization: `Bot ${process.env.TOKEN}`,

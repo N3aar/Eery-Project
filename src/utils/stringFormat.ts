@@ -1,3 +1,6 @@
+import { type AccentKey, accents } from "./contants.js";
+import { shuffle } from "./random.js";
+
 export function capitalize(text: string) {
 	return text
 		?.split(" ")
@@ -11,4 +14,23 @@ export function replaceUnderlines(text: string, replacer = " ") {
 
 export function pad(number: number) {
 	return String(number).padStart(2, "0");
+}
+
+export function shuffleString(input: string): string {
+	const words = input.split(" ");
+
+	const shuffledWords = words.map((word) => {
+		const characters = word.split("");
+		const shuffledCharacters = shuffle(characters);
+		return shuffledCharacters.join("");
+	});
+
+	return shuffledWords.join(" ");
+}
+
+export function removeAccents(input: string) {
+	return input
+		.split("")
+		.map((char) => accents[char as AccentKey] || char)
+		.join("");
 }
