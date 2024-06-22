@@ -16,7 +16,8 @@
 		"lint": "biome check src",
 		"lint:fix": "biome check --apply src",
 		"generate": "prisma generate",
-		"prepare": "husky || true"
+		"prepare": "husky || true",
+		"backup:pull": "node --env-file=.env scripts/pull_db"
 	},
 	"devDependencies": {
 		"@biomejs/biome": "1.7.3",
@@ -26,6 +27,7 @@
 		"husky": "^9.0.11",
 		"nodemon": "^3.1.1",
 		"rimraf": "^5.0.7",
+		"tar": "^7.4.0",
 		"tsc-alias": "^1.8.10",
 		"typescript": "^5.4.5"
 	},
