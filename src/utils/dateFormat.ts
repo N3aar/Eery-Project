@@ -1,4 +1,5 @@
 import dayjs from "dayjs";
+import type { discordTimestampFormats } from "./contants.js";
 
 type DateObject = {
 	day?: number;
@@ -28,7 +29,10 @@ export function formatDate(date: DateObject): string {
 	return parts.join("/");
 }
 
-export function convertToDiscordTimestamp(date: string): string {
+export function convertToDiscordTimestamp(
+	date: string,
+	format: discordTimestampFormats,
+): string {
 	const timestamp = Math.floor(new Date(date).getTime() / 1000);
-	return `<t:${timestamp}:D>`;
+	return `<t:${timestamp}:${format}>`;
 }

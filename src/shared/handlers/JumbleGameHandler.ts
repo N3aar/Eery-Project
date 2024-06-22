@@ -2,6 +2,7 @@ import {
 	type TranslationKey,
 	embedColors,
 	translations,
+	discordTimestampFormats,
 } from "@/utils/contants.js";
 import { convertToDiscordTimestamp } from "@/utils/dateFormat.js";
 import { shuffle } from "@/utils/random.js";
@@ -20,7 +21,7 @@ import {
 	type InteractionCollector,
 	type Message,
 } from "discord.js";
-import type { ArtistData } from "../integrations/musicBrainzAPI.js";
+import type { ArtistData } from "../types/musicBrainzTypes.js";
 
 export enum JumbleStatus {
 	STARTING = 0,
@@ -201,8 +202,12 @@ export default class JumbleGameHandler {
 		const hints: string[] = [];
 		const isGroup = type ? this.isGroupType(type) : false;
 
-		const beginTimestamp = begin ? convertToDiscordTimestamp(begin) : null;
-		const endTimestamp = end ? convertToDiscordTimestamp(end) : null;
+		const beginTimestamp = begin
+			? convertToDiscordTimestamp(begin, discordTimestampFormats.LONG_DATE)
+			: null;
+		const endTimestamp = end
+			? convertToDiscordTimestamp(end, discordTimestampFormats.LONG_DATE)
+			: null;
 
 		const arttype = translations[type ?? "group"];
 		const artgender = translations[gender ?? "male"];

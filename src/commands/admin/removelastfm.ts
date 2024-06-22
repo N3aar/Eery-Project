@@ -1,3 +1,4 @@
+import { adminPermission } from "@/utils/contants.js";
 import { Command } from "@sapphire/framework";
 import type { GuildMember } from "discord.js";
 
@@ -11,6 +12,7 @@ export class RemoveLastFmCommand extends Command {
 			builder
 				.setName("removelastfm")
 				.setDescription("Desvincular um usuário de uma conta do LastFM")
+				.setDefaultMemberPermissions(adminPermission)
 				.addStringOption((option) => {
 					option.setName("username");
 					option.setDescription("Username da conta a ser desvinculada");

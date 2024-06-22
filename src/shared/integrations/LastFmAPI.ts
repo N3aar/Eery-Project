@@ -1,34 +1,5 @@
 import BaseRequest from "@/shared/base/BaseRequest.js";
-
-export type ImageData = {
-	size: string;
-	"#text": string;
-};
-
-export type UserArtistData = {
-	name: string;
-	url: string;
-	playcount: 4802;
-	stremable: string;
-	image: ImageData[];
-	mbid?: string | null;
-	"@attr": {
-		rank: string;
-	};
-};
-
-type TopArtistsData = {
-	topartists: {
-		artist: UserArtistData[];
-		"@attr": {
-			user: string;
-			totalPages: string;
-			page: string;
-			perPage: string;
-			total: string;
-		};
-	};
-};
+import type { UserArtistData, TopArtistsData } from "../types/lastFmTypes.js";
 
 export default class LastFmAPI extends BaseRequest {
 	apiKey: string;

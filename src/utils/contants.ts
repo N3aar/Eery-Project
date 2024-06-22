@@ -31,6 +31,16 @@ export enum periods {
 	NIGHT = "NIGHT",
 }
 
+export enum discordTimestampFormats {
+	SHORT_TIME = "t",
+	LONG_TIME = "T",
+	SHORT_DATE = "d",
+	LONG_DATE = "D",
+	SHORT_DATE_TIME = "f",
+	LONG_DATE_TIME = "F",
+	RELATIVE_TIME = "R",
+}
+
 export const urlFixers = {
 	"https://www.youtube.com/shorts/": "https://youtu.be/",
 	"https://www.youtube.com/watch?v=": "https://youtu.be/",
@@ -62,6 +72,10 @@ export const greetings = [
 export const translations = {
 	group: "grupo",
 	person: "pessoa",
+	orchestra: "orquestra",
+	choir: "Coro",
+	character: "Personagem",
+	other: "Outro",
 	male: "masculino",
 	female: "feminino",
 };
