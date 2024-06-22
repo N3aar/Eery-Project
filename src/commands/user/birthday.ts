@@ -6,6 +6,7 @@ export class BirthdayCommand extends Command {
 	public constructor(context: Command.LoaderContext, options: Command.Options) {
 		super(context, { ...options });
 	}
+
 	public override registerApplicationCommands(registry: Command.Registry) {
 		registry.registerChatInputCommand((builder) =>
 			builder
@@ -29,6 +30,7 @@ export class BirthdayCommand extends Command {
 				}),
 		);
 	}
+
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const guild = interaction.guild;
 		const member = interaction.member as GuildMember;
