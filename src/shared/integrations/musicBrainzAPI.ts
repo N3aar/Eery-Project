@@ -3,7 +3,11 @@ import type { ArtistData } from "../types/musicBrainzTypes.js";
 
 export default class MusicBrainzAPI extends BaseRequest {
 	constructor() {
-		super("https://musicbrainz.org/ws/2", {});
+		super("https://musicbrainz.org/ws/2", {
+			headers: {
+				"User-Agent": "EeryProject/1.0 (eery-project@outlook.com)",
+			},
+		});
 	}
 
 	public async searchArtist(artistName: string): Promise<ArtistData | null> {
