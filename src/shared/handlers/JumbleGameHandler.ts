@@ -194,10 +194,8 @@ export default class JumbleGameHandler {
 			time: 25_000,
 		});
 
-		collector.on(
-			"collect",
-			async (interaction) =>
-				await this.processInteraction(interaction, channelId),
+		collector.on("collect", async (interaction) =>
+			this.processInteraction(interaction, channelId),
 		);
 
 		collector.on("end", async (collected) => await this.finishGame(channelId));
@@ -285,17 +283,35 @@ export default class JumbleGameHandler {
 		}
 	}
 
-	private async addPoints(userId: string, points: number) {
-		await container.db.jumble.update({
-			where: {
-				userId: userId,
-			},
-			data: {
-				points: {
-					increment: points,
+	private async addPoints(userId: string, points: number): Promise<boolean> {
+		try {
+			const user = await container.db.user.findUnique({
+				where: {
+					discordId: userId,
 				},
-			},
-		});
+			});
+
+			if (!user) return false;
+
+			await container.db.jumble.upsert({
+				where: {
+					userId: user.id,
+				},
+				update: {
+					points: {
+						increment: points,
+					},
+				},
+				create: {
+					userId: user.id,
+					points: points,
+				},
+			});
+
+			return true;
+		} catch (error) {
+			return false;
+		}
 	}
 
 	private async setBestTime(userId: string, time: number) {
@@ -318,7 +334,7 @@ export default class JumbleGameHandler {
 
 		gameContext.additionalHints++;
 
-		const hints = gameContext.hints.slice(0, hintsCount).join("\n");
+		const hints = gameContext.hints.slice(0, hintsCount + 1).join("\n");
 		const addHints = gameContext.additionalHints;
 
 		const extraHints = addHints > 1 ? "dicas extras" : "dica extra";
@@ -335,13 +351,13 @@ export default class JumbleGameHandler {
 		const newMessage = {
 			embeds: [newEmbed],
 			components: [
-				hintsCount + 1 > maxHints
+				hintsCount + 1 >= maxHints
 					? this.createComponents(true)
 					: (component as ActionRow<ButtonComponent>),
 			],
 		};
 
-		await gameContext?.message?.edit(newMessage);
+		gameContext?.message?.edit(newMessage);
 	}
 
 	private async reshuffle(gameContext: JumbleGameContext) {
@@ -354,7 +370,7 @@ export default class JumbleGameHandler {
 		const reshuffled = shuffleString(artistName);
 		const newEmbed = embed.setDescription(`\`${reshuffled}\``);
 
-		await message.edit({
+		message.edit({
 			embeds: [newEmbed],
 		});
 	}
@@ -385,7 +401,7 @@ export default class JumbleGameHandler {
 			return;
 		}
 
-		await interaction.deferUpdate();
+		interaction.deferUpdate();
 		gameContext.status = JumbleStatus.GIVEUP;
 		collector.stop();
 	}
@@ -397,13 +413,17 @@ export default class JumbleGameHandler {
 	) {
 		const gameContext = this.getJumbleGameContext(channelId);
 		const message = gameContext?.message;
+		const collector = gameContext?.collector;
 
-		if (!gameContext || !message) return;
+		if (!gameContext || !message || !collector) return;
 
 		const artist = gameContext.artistName;
 		const passed = Date.now() - gameContext.started;
 		const seconds = Number.parseFloat((passed / 1000).toFixed(1));
 		const description = `**${winnerName}** acertou! A resposta foi \`${artist}\``;
+
+		gameContext.status = JumbleStatus.WINNER;
+		collector.stop();
 
 		const userData = await container.db.user.findUnique({
 			where: { discordId: winnerId },
@@ -415,27 +435,26 @@ export default class JumbleGameHandler {
 
 		if (!userData || !userData.Jumble) return;
 
-		await this.addPoints(userData.id, 1);
+		const added = await this.addPoints(userData.id, 1);
+		if (added) {
+			const bestTime = userData.Jumble.bestTime;
 
-		const bestTime = userData.Jumble.bestTime;
-
-		if (bestTime <= 0 || seconds < bestTime) {
-			await this.setBestTime(userData.id, seconds);
+			if (bestTime <= 0 || seconds < bestTime) {
+				await this.setBestTime(userData.id, seconds);
+			}
 		}
-
-		gameContext.status = JumbleStatus.WINNER;
 
 		const embed = new EmbedBuilder()
 			.setDescription(description)
 			.setFooter({ text: `Respondido em ${seconds}s` })
 			.setColor(embedColors.success);
 
-		await message.channel.send({
+		message.channel.send({
 			embeds: [embed],
 		});
 	}
 
-	private async processInteraction(
+	private processInteraction(
 		interaction: ButtonInteraction,
 		channelId: string,
 	) {
@@ -446,26 +465,26 @@ export default class JumbleGameHandler {
 
 		switch (customId) {
 			case ButtonCustomIds.ADD_HINT:
-				await interaction.deferUpdate();
-				await this.addHint(gameContext);
+				interaction.deferUpdate();
+				this.addHint(gameContext);
 				break;
 
 			case ButtonCustomIds.RESHUFFLE:
-				await interaction.deferUpdate();
-				await this.reshuffle(gameContext);
+				interaction.deferUpdate();
+				this.reshuffle(gameContext);
 				break;
 
 			case ButtonCustomIds.GIVE_UP:
-				await this.giveUp(gameContext, interaction);
+				this.giveUp(gameContext, interaction);
 				break;
 		}
 	}
 
 	private async finishGame(channelId: string) {
 		const gameContext = this.getJumbleGameContext(channelId);
-		if (!gameContext) return;
-
 		this.deleteJamGame(channelId);
+
+		if (!gameContext) return;
 
 		const message = gameContext.message;
 		const embed = gameContext.embed;
@@ -491,7 +510,7 @@ export default class JumbleGameHandler {
 		if (isWinner) embed.spliceFields(1, 1);
 		else embed.spliceFields(1, 1, newField);
 
-		await message.edit({
+		message.edit({
 			embeds: [embed],
 			components: [],
 		});
