@@ -74,7 +74,7 @@ export class JumbleCommand extends Command {
 		const totalArtists =
 			await this.container.lastFmAPI.getTotalArtists(username);
 		const totalPages = Math.ceil((totalArtists ?? 100) / 100);
-		const twentyPercent = Math.floor(totalPages / 2);
+		const twentyPercent = Math.floor(totalPages * 0.3);
 
 		const page = getRandomNumber(1, Math.max(totalPages - twentyPercent, 1));
 		const artists = await this.container.lastFmAPI.getTopArtists(
