@@ -1,5 +1,5 @@
 export const embedColors = {
-	default: 0xed3939,
+	default: 0x9848e8,
 	anilist: 0x3db4f2,
 	playing: 0x4488ff,
 	error: 0xf9576a,
@@ -79,6 +79,18 @@ export const translations = {
 	male: "masculino",
 	female: "feminino",
 	neither: "nenhum",
+};
+
+export const fieldTitles = {
+	points: "Vitórias",
+	bestTime: "Melhor Tempo",
+	plays: "Jogadas",
+};
+
+export const fieldValues = {
+	points: "Pontos",
+	bestTime: "Segundos",
+	plays: "Vezes",
 };
 
 export type TranslationKey = keyof typeof translations;

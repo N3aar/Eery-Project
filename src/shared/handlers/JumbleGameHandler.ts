@@ -23,6 +23,8 @@ import {
 } from "discord.js";
 import type { ArtistData } from "../types/musicBrainzTypes.js";
 
+export type JumbleField = "points" | "bestTime" | "plays";
+
 export enum JumbleStatus {
 	STARTING = 0,
 	PLAYING = 1,
@@ -30,7 +32,7 @@ export enum JumbleStatus {
 	GIVEUP = 3,
 }
 
-export type JumbleGameContext = {
+type JumbleGameContext = {
 	message?: Message;
 	embed?: EmbedBuilder;
 	collector?: InteractionCollector<ButtonInteraction>;
@@ -44,7 +46,7 @@ export type JumbleGameContext = {
 	additionalHints: number;
 };
 
-export type ArtistInfo = {
+type ArtistInfo = {
 	isGroup: boolean;
 	type: TranslationKey | null;
 	gender: TranslationKey | null;
@@ -142,6 +144,19 @@ export default class JumbleGameHandler {
 		} catch (error) {
 			return null;
 		}
+	}
+
+	public async getLeaderboard(field: JumbleField, max: number) {
+		const orderBy = { [field]: field === "bestTime" ? "asc" : "desc" };
+		const query = {
+			orderBy,
+			include: {
+				user: true,
+			},
+			take: Math.min(max, 25),
+		};
+
+		return container.db.jumble.findMany(query);
 	}
 
 	public startJumble(channelId: string, message: Message, embed: EmbedBuilder) {
