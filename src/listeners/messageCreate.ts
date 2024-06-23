@@ -1,3 +1,4 @@
+import answerJumble from "@/events/answerJumble.js";
 import emojiHelper from "@/events/emojiHelper.js";
 import giveXp from "@/events/giveXp.js";
 import replyGreeting from "@/events/replyGreeting.js";
@@ -23,5 +24,6 @@ export class MessageCreate extends Listener {
 		replyGreeting(message);
 		giveXp(message);
 		urlHelper(message);
+		answerJumble(message);
 	}
 }

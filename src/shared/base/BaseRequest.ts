@@ -1,14 +1,21 @@
 export default class BaseRequest {
 	private url: string;
 	private options: RequestInit;
+	private queryOptions: URLSearchParams;
 
-	constructor(url: string, options: RequestInit) {
+	constructor(url: string, options: RequestInit, queryOptions = {}) {
 		this.url = url;
 		this.options = options;
+		this.queryOptions = new URLSearchParams(queryOptions);
 	}
 
 	private async request<T>(path: string, options: RequestInit): Promise<T> {
-		const endpoint = `${this.url}${path.startsWith("/") ? "" : "/"}${path}`;
+		const dash = path.startsWith("/") ? "" : "/";
+		const prefix = path.includes("?") ? "&" : "?";
+
+		const query = `${prefix}${this.queryOptions.toString()}`;
+		const endpoint = `${this.url}${dash}${path}${query}`;
+
 		const response: Response = await fetch(endpoint, {
 			...this.options,
 			...options,

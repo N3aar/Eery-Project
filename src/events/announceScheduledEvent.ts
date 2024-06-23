@@ -74,16 +74,21 @@ export default async function announceScheduledEvent() {
 			.filter((event) => event.type === "BIRTHDAY" && event.createdBy)
 			.map((event) => `<@${event.createdBy}>`);
 
+		const hasBirthdays = birthdayUsers.length > 0;
+		const birthdayMessage =
+			hasBirthdays &&
+			`${birthdayUsers.join(" & ")}, Feliz Aniversário! :partying_face: :tada:`;
+
 		const formatedMessages = [
-			`${eventsMsg.length > 0 ? `# Eventos\n${eventsMsg.join("\n")}` : ""}`,
-			`${birthdayUsers.join(" & ")}, Feliz Aniversário! :partying_face: :tada:`,
+			eventsMsg.length > 0 ? `# Eventos\n${eventsMsg.join("\n")}` : "",
+			hasBirthdays ? birthdayMessage : "",
 		];
 
 		const message: MessageCreateOptions = {
 			content: formatedMessages.join("\n\n"),
 		};
 
-		if (birthdayUsers.length > 0) {
+		if (hasBirthdays) {
 			const random =
 				birthdayVideos[getRandomNumber(0, birthdayVideos.length - 1)];
 

@@ -1,3 +1,4 @@
+import type { discordTimestampFormats } from "@/shared/types/discordTypes.js";
 import dayjs from "dayjs";
 
 type DateObject = {
@@ -26,4 +27,12 @@ export function formatDate(date: DateObject): string {
 	].filter((part) => part);
 
 	return parts.join("/");
+}
+
+export function convertToDiscordTimestamp(
+	date: string,
+	format: discordTimestampFormats,
+): string {
+	const timestamp = Math.floor(new Date(date).getTime() / 1000);
+	return `<t:${timestamp}:${format}>`;
 }
