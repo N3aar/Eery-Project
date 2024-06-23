@@ -1,6 +1,5 @@
 import {
 	type TranslationKey,
-	discordTimestampFormats,
 	embedColors,
 	translations,
 } from "@/utils/contants.js";
@@ -21,6 +20,7 @@ import {
 	type InteractionCollector,
 	type Message,
 } from "discord.js";
+import { discordTimestampFormats } from "../types/discordTypes.js";
 import type { ArtistData } from "../types/musicBrainzTypes.js";
 
 export type JumbleField = "points" | "bestTime" | "plays";

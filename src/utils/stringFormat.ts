@@ -1,6 +1,58 @@
 import levenshtein from "js-levenshtein";
-import { type AccentKey, accents } from "./contants.js";
 import { shuffle } from "./random.js";
+
+const accents = {
+	á: "a",
+	à: "a",
+	ã: "a",
+	â: "a",
+	ä: "a",
+	Á: "A",
+	À: "A",
+	Ã: "A",
+	Â: "A",
+	Ä: "A",
+	é: "e",
+	è: "e",
+	ê: "e",
+	ë: "e",
+	É: "E",
+	È: "E",
+	Ê: "E",
+	Ë: "E",
+	í: "i",
+	ì: "i",
+	î: "i",
+	ï: "i",
+	Í: "I",
+	Ì: "I",
+	Î: "I",
+	Ï: "I",
+	ó: "o",
+	ò: "o",
+	õ: "o",
+	ô: "o",
+	ö: "o",
+	Ó: "O",
+	Ò: "O",
+	Õ: "O",
+	Ô: "O",
+	Ö: "O",
+	ú: "u",
+	ù: "u",
+	û: "u",
+	ü: "u",
+	Ú: "U",
+	Ù: "U",
+	Û: "U",
+	Ü: "U",
+	ç: "c",
+	Ç: "C",
+	ñ: "n",
+	Ñ: "N",
+};
+
+type AccentKey = keyof typeof accents;
 
 export function capitalize(text: string) {
 	return text

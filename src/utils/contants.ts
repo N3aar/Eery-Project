@@ -31,16 +31,6 @@ export enum periods {
 	NIGHT = "NIGHT",
 }
 
-export enum discordTimestampFormats {
-	SHORT_TIME = "t",
-	LONG_TIME = "T",
-	SHORT_DATE = "d",
-	LONG_DATE = "D",
-	SHORT_DATE_TIME = "f",
-	LONG_DATE_TIME = "F",
-	RELATIVE_TIME = "R",
-}
-
 export const urlFixers = {
 	"https://www.youtube.com/shorts/": "https://youtu.be/",
 	"https://www.youtube.com/watch?v=": "https://youtu.be/",
@@ -111,56 +101,3 @@ export const expValues = {
 	max: 25,
 	cooldown: 60 * 1000,
 };
-
-export const accents = {
-	á: "a",
-	à: "a",
-	ã: "a",
-	â: "a",
-	ä: "a",
-	Á: "A",
-	À: "A",
-	Ã: "A",
-	Â: "A",
-	Ä: "A",
-	é: "e",
-	è: "e",
-	ê: "e",
-	ë: "e",
-	É: "E",
-	È: "E",
-	Ê: "E",
-	Ë: "E",
-	í: "i",
-	ì: "i",
-	î: "i",
-	ï: "i",
-	Í: "I",
-	Ì: "I",
-	Î: "I",
-	Ï: "I",
-	ó: "o",
-	ò: "o",
-	õ: "o",
-	ô: "o",
-	ö: "o",
-	Ó: "O",
-	Ò: "O",
-	Õ: "O",
-	Ô: "O",
-	Ö: "O",
-	ú: "u",
-	ù: "u",
-	û: "u",
-	ü: "u",
-	Ú: "U",
-	Ù: "U",
-	Û: "U",
-	Ü: "U",
-	ç: "c",
-	Ç: "C",
-	ñ: "n",
-	Ñ: "N",
-};
-
-export type AccentKey = keyof typeof accents;

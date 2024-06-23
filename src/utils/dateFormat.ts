@@ -1,5 +1,5 @@
+import type { discordTimestampFormats } from "@/shared/types/discordTypes.js";
 import dayjs from "dayjs";
-import type { discordTimestampFormats } from "./contants.js";
 
 type DateObject = {
 	day?: number;
