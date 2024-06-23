@@ -66,9 +66,6 @@ export class JBLeaderboardCommand extends Command {
 		const fieldTitle = fieldTitles[type];
 		const fieldValue = fieldValues[type];
 
-		console.log(type);
-		console.log(fieldTitle);
-
 		const values = leaderboard.map((stats) => `${stats[type]} ${fieldValue}`);
 		const users = leaderboard.map((stats, index) => {
 			return `${leaderboardEmojis[index] ?? `${index + 1}.`} <@${
