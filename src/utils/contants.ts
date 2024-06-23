@@ -78,6 +78,7 @@ export const translations = {
 	other: "Outro",
 	male: "masculino",
 	female: "feminino",
+	neither: "nenhum",
 };
 
 export type TranslationKey = keyof typeof translations;

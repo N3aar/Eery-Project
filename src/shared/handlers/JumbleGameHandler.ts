@@ -1,8 +1,8 @@
 import {
 	type TranslationKey,
+	discordTimestampFormats,
 	embedColors,
 	translations,
-	discordTimestampFormats,
 } from "@/utils/contants.js";
 import { convertToDiscordTimestamp } from "@/utils/dateFormat.js";
 import { shuffle } from "@/utils/random.js";
@@ -404,7 +404,7 @@ export default class JumbleGameHandler {
 
 		const bestTime = userData.Jumble.bestTime;
 
-		if (seconds > bestTime) {
+		if (bestTime <= 0 || seconds < bestTime) {
 			await this.setBestTime(userData.id, seconds);
 		}
 

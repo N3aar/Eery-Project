@@ -1,5 +1,5 @@
 import BaseRequest from "@/shared/base/BaseRequest.js";
-import type { UserArtistData, TopArtistsData } from "../types/lastFmTypes.js";
+import type { TopArtistsData, UserArtistData } from "../types/lastFmTypes.js";
 
 export default class LastFmAPI extends BaseRequest {
 	apiKey: string;

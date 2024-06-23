@@ -1,4 +1,4 @@
-import type { UserArtistData } from "@/shared/integrations/LastFmAPI.js";
+import type { UserArtistData } from "@/shared/types/lastFmTypes.js";
 import { embedColors } from "@/utils/contants.js";
 import { getRandomNumber } from "@/utils/random.js";
 import { shuffleString } from "@/utils/stringFormat.js";
