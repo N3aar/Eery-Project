@@ -2,11 +2,13 @@ import levenshtein from "js-levenshtein";
 import { shuffle } from "./random.js";
 
 const accents = {
+	å: "a",
 	á: "a",
 	à: "a",
 	ã: "a",
 	â: "a",
 	ä: "a",
+	Å: "A",
 	Á: "A",
 	À: "A",
 	Ã: "A",

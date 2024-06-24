@@ -22,27 +22,10 @@ export class JumbleCommand extends Command {
 
 		if (!member || !channel) return;
 
-		const alreadyPlaying = this.container.jumbleGameHandler.hasJumble(
-			channel.id,
-		);
-
-		if (alreadyPlaying) {
-			const embed = new EmbedBuilder()
-				.setDescription("Outro jogo está em andamento neste canal no momento.")
-				.setColor(embedColors.default);
-
-			await interaction.reply({
-				embeds: [embed],
-				ephemeral: true,
-				fetchReply: false,
-			});
-
-			return;
-		}
-
 		const userStats = await this.container.jumbleGameHandler.getUserStats(
 			member.id,
 		);
+
 		if (!userStats) {
 			await interaction.reply({
 				content:
@@ -55,6 +38,7 @@ export class JumbleCommand extends Command {
 		}
 
 		const username = userStats.lastfmUser;
+
 		if (!username || username.length <= 0) {
 			const embed = new EmbedBuilder()
 				.setDescription(
@@ -70,6 +54,26 @@ export class JumbleCommand extends Command {
 
 			return;
 		}
+
+		const channelId = channel.id;
+		const alreadyPlaying =
+			this.container.jumbleGameHandler.hasJumble(channelId);
+
+		if (alreadyPlaying) {
+			const embed = new EmbedBuilder()
+				.setDescription("Outro jogo está em andamento neste canal no momento.")
+				.setColor(embedColors.default);
+
+			await interaction.reply({
+				embeds: [embed],
+				ephemeral: true,
+				fetchReply: false,
+			});
+
+			return;
+		}
+
+		this.container.jumbleGameHandler.allocateChannel(channelId);
 
 		const totalArtists =
 			await this.container.lastFmAPI.getTotalArtists(username);
@@ -91,10 +95,11 @@ export class JumbleCommand extends Command {
 				ephemeral: false,
 				fetchReply: false,
 			});
+
+			this.container.jumbleGameHandler.deleteJumbleGame(channelId);
 			return;
 		}
 
-		const channelId = channel.id;
 		const ownerId = member.id;
 		const ownerName = member.displayName;
 
@@ -115,6 +120,8 @@ export class JumbleCommand extends Command {
 				ephemeral: false,
 				fetchReply: false,
 			});
+
+			this.container.jumbleGameHandler.deleteJumbleGame(channelId);
 			return;
 		}
 
@@ -149,22 +156,12 @@ export class JumbleCommand extends Command {
 			fetchReply: true,
 		});
 
+		this.container.jumbleGameHandler.addPlay(member.id, 1);
 		this.container.jumbleGameHandler.startJumble(
 			message.channel.id,
 			message,
 			embed,
 		);
-
-		await this.container.db.jumble.update({
-			where: {
-				id: userStats.id,
-			},
-			data: {
-				plays: {
-					increment: 1,
-				},
-			},
-		});
 	}
 
 	private chooseRandomArtist(artists: UserArtistData[]) {
