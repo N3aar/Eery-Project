@@ -1,3 +1,4 @@
+import { fail } from "node:assert";
 import {
 	type TranslationKey,
 	embedColors,
@@ -47,13 +48,13 @@ type JumbleGameContext = {
 };
 
 type ArtistInfo = {
-	isGroup: boolean;
-	type: TranslationKey | null;
-	gender: TranslationKey | null;
-	musicGenre: string | undefined;
-	country: string | null;
-	begin: string | null;
-	end: string | null;
+	isGroup?: boolean;
+	musicGenre?: string;
+	type?: TranslationKey | null;
+	gender?: TranslationKey | null;
+	country?: string | null;
+	begin?: string | null;
+	end?: string | null;
 };
 
 enum ButtonCustomIds {
@@ -87,18 +88,8 @@ export default class JumbleGameHandler {
 		name: string,
 		mbid?: string | null,
 	): Promise<JumbleGameContext | null> {
-		const artistInfo = await this.getArtistInfo(name, mbid);
-		if (!artistInfo) return null;
-
-		const hints = this.createHints(
-			playcount,
-			artistInfo.type,
-			artistInfo.country,
-			artistInfo.musicGenre,
-			artistInfo.gender,
-			artistInfo.begin,
-			artistInfo.end,
-		);
+		const artistInfo: ArtistInfo = (await this.getArtistInfo(name, mbid)) ?? {};
+		const hints = this.createHints(playcount, artistInfo);
 
 		const gameContext: JumbleGameContext = {
 			hints,
@@ -203,15 +194,9 @@ export default class JumbleGameHandler {
 		return collector;
 	}
 
-	private createHints(
-		playcount: number,
-		type: TranslationKey | null,
-		country: string | null,
-		musicGenre: string | undefined,
-		gender: TranslationKey | null,
-		begin: string | null,
-		end: string | null,
-	): string[] {
+	private createHints(playcount: number, artistInfo: ArtistInfo): string[] {
+		const { type, country, musicGenre, gender, begin, end } = artistInfo;
+
 		const hints: string[] = [];
 		const isGroup = type ? this.isGroupType(type) : false;
 
@@ -222,8 +207,8 @@ export default class JumbleGameHandler {
 			? convertToDiscordTimestamp(end, discordTimestampFormats.LONG_DATE)
 			: null;
 
-		const arttype = translations[type ?? "group"];
-		const artgender = translations[gender ?? "male"];
+		const arttype = translations[type ?? "group"] ?? type;
+		const artgender = translations[gender ?? "male"] ?? gender;
 		const flag = `:flag_${country?.toLowerCase()}:`;
 
 		const conditionsAndHints: [boolean, string][] = [
@@ -283,35 +268,17 @@ export default class JumbleGameHandler {
 		}
 	}
 
-	private async addPoints(userId: string, points: number): Promise<boolean> {
-		try {
-			const user = await container.db.user.findUnique({
-				where: {
-					discordId: userId,
+	private async addPoints(userId: string, points: number) {
+		await container.db.jumble.update({
+			where: {
+				userId: userId,
+			},
+			data: {
+				points: {
+					increment: points,
 				},
-			});
-
-			if (!user) return false;
-
-			await container.db.jumble.upsert({
-				where: {
-					userId: user.id,
-				},
-				update: {
-					points: {
-						increment: points,
-					},
-				},
-				create: {
-					userId: user.id,
-					points: points,
-				},
-			});
-
-			return true;
-		} catch (error) {
-			return false;
-		}
+			},
+		});
 	}
 
 	private async setBestTime(userId: string, time: number) {
@@ -433,15 +400,24 @@ export default class JumbleGameHandler {
 			},
 		});
 
-		if (!userData || !userData.Jumble) return;
+		if (!userData || !userData.Jumble) {
+			const embed = new EmbedBuilder()
+				.setDescription(
+					"Use o comando /lastfm para registrar sua conta antes de jogar.",
+				)
+				.setColor(embedColors.default);
 
-		const added = await this.addPoints(userData.id, 1);
-		if (added) {
-			const bestTime = userData.Jumble.bestTime;
+			await message.channel.send({ embeds: [embed] });
 
-			if (bestTime <= 0 || seconds < bestTime) {
-				await this.setBestTime(userData.id, seconds);
-			}
+			return;
+		}
+
+		await this.addPoints(userData.id, 1);
+
+		const bestTime = userData.Jumble.bestTime;
+
+		if (bestTime <= 0 || seconds < bestTime) {
+			await this.setBestTime(userData.id, seconds);
 		}
 
 		const embed = new EmbedBuilder()
@@ -449,9 +425,7 @@ export default class JumbleGameHandler {
 			.setFooter({ text: `Respondido em ${seconds}s` })
 			.setColor(embedColors.success);
 
-		message.channel.send({
-			embeds: [embed],
-		});
+		message.channel.send({ embeds: [embed] });
 	}
 
 	private processInteraction(
@@ -509,6 +483,14 @@ export default class JumbleGameHandler {
 
 		if (isWinner) embed.spliceFields(1, 1);
 		else embed.spliceFields(1, 1, newField);
+
+		if (!isWinner && !isGiveUp) {
+			const failEmbed = new EmbedBuilder()
+				.setDescription(`Ninguém adivinhou. A resposta era \`${artistName}\``)
+				.setColor(embedColors.error);
+
+			message.reply({ embeds: [failEmbed] });
+		}
 
 		message.edit({
 			embeds: [embed],

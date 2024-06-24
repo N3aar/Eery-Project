@@ -1,5 +1,11 @@
-export function getRandomNumber(min: number, max: number) {
+export function getRandomInt(min: number, max: number) {
 	return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+export function getSkewedRandomInt(min: number, max: number) {
+	const random = Math.random();
+	const skewed = random ** 2;
+	return Math.floor(skewed * (max - min + 1)) + min;
 }
 
 export function shuffle<T>(array: T[]): T[] {

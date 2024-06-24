@@ -63,12 +63,13 @@ export const translations = {
 	group: "grupo",
 	person: "pessoa",
 	orchestra: "orquestra",
-	choir: "Coro",
-	character: "Personagem",
-	other: "Outro",
+	choir: "coro",
+	character: "personagem",
+	other: "outro",
 	male: "masculino",
 	female: "feminino",
 	neither: "nenhum",
+	not_applicable: "não aplicável",
 };
 
 export const fieldTitles = {
