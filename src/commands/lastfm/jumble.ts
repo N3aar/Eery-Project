@@ -1,6 +1,6 @@
 import type { UserArtistData } from "@/shared/types/lastFmTypes.js";
 import { embedColors } from "@/utils/contants.js";
-import { getRandomNumber } from "@/utils/random.js";
+import { getSkewedRandomInt } from "@/utils/random.js";
 import { shuffleString } from "@/utils/stringFormat.js";
 import { Command } from "@sapphire/framework";
 import { EmbedBuilder, type GuildMember, type TextChannel } from "discord.js";
@@ -74,9 +74,9 @@ export class JumbleCommand extends Command {
 		const totalArtists =
 			await this.container.lastFmAPI.getTotalArtists(username);
 		const totalPages = Math.ceil((totalArtists ?? 100) / 100);
-		const twentyPercent = Math.floor(totalPages * 0.3);
+		const reducedPages = Math.floor(totalPages * 0.3);
 
-		const page = getRandomNumber(1, Math.max(totalPages - twentyPercent, 1));
+		const page = getSkewedRandomInt(1, reducedPages);
 		const artists = await this.container.lastFmAPI.getTopArtists(
 			username,
 			100,
@@ -111,7 +111,7 @@ export class JumbleCommand extends Command {
 
 		if (!gameContext) {
 			await interaction.reply({
-				content: "Não foi encontrado informações sobre o artista!",
+				content: "Não foi possível iniciar este Jumble, tente novamente!",
 				ephemeral: false,
 				fetchReply: false,
 			});

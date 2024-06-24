@@ -1,5 +1,5 @@
 import { expValues } from "@/utils/contants.js";
-import { getRandomNumber } from "@/utils/random.js";
+import { getRandomInt } from "@/utils/random.js";
 import { container } from "@sapphire/pieces";
 import type { Guild, GuildMember, TextChannel } from "discord.js";
 
@@ -63,7 +63,7 @@ export default class ExpHandler {
 
 		if (!expStats?.canGetExp) return;
 
-		expStats.exp += getRandomNumber(expValues.min, expValues.max);
+		expStats.exp += getRandomInt(expValues.min, expValues.max);
 		expStats.canGetExp = false;
 
 		const newXp = expStats.exp;
