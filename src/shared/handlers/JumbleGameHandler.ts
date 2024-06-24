@@ -1,4 +1,3 @@
-import { fail } from "node:assert";
 import {
 	type TranslationKey,
 	embedColors,
@@ -31,6 +30,7 @@ export enum JumbleStatus {
 	PLAYING = 1,
 	WINNER = 2,
 	GIVEUP = 3,
+	STOPPED = 4,
 }
 
 type JumbleGameContext = {
@@ -64,10 +64,12 @@ enum ButtonCustomIds {
 }
 
 export default class JumbleGameHandler {
-	jumble: Map<string, JumbleGameContext>;
+	jumble: Map<string, JumbleGameContext | undefined>;
+	users: Map<string, Jumble>;
 
 	constructor() {
 		this.jumble = new Map();
+		this.users = new Map();
 	}
 
 	public getJumbleGameContext(
@@ -77,6 +79,7 @@ export default class JumbleGameHandler {
 	}
 
 	public hasJumble(channelId: string): boolean {
+		this.checkAndStopIdleJumble(channelId);
 		return this.jumble.has(channelId);
 	}
 
@@ -106,40 +109,77 @@ export default class JumbleGameHandler {
 		return gameContext;
 	}
 
-	public deleteJamGame(channelId: string) {
+	public allocateChannel(channelId: string) {
+		this.jumble.set(channelId, undefined);
+	}
+
+	public deleteJumbleGame(channelId: string) {
 		this.jumble.delete(channelId);
 	}
 
-	public async getUserStats(memberId: string): Promise<Jumble | null> {
-		try {
-			const user = await container.db.user.findUnique({
-				where: {
-					discordId: memberId,
-				},
-				select: {
-					id: true,
-					Jumble: true,
-				},
-			});
+	public stopJumble(channelId: string) {
+		const gameContext = this.getJumbleGameContext(channelId);
+		if (!gameContext) return;
 
-			if (!user) return null;
-			if (user.Jumble) return user.Jumble;
+		gameContext.status = JumbleStatus.STOPPED;
+		gameContext.collector?.stop();
 
-			const newJumble = await container.db.jumble.create({
-				data: {
-					userId: user.id,
-				},
-			});
+		this.deleteJumbleGame(channelId);
+	}
 
-			return newJumble;
-		} catch (error) {
-			return null;
+	private checkAndStopIdleJumble(channelId: string) {
+		const gameContext = this.getJumbleGameContext(channelId);
+
+		if (!gameContext) return;
+
+		const now = Date.now();
+		const past = now - gameContext?.started;
+		const fortySeconds = 40000;
+
+		if (past > fortySeconds) {
+			this.stopJumble(channelId);
 		}
+	}
+
+	private async fetchUserStats(memberId: string): Promise<Jumble | null> {
+		const user = await container.db.user.findUnique({
+			where: {
+				discordId: memberId,
+			},
+			select: {
+				id: true,
+				Jumble: true,
+			},
+		});
+
+		if (!user) return null;
+		if (user.Jumble) return user.Jumble;
+
+		const newJumble = await container.db.jumble.create({
+			data: {
+				userId: memberId,
+			},
+		});
+
+		return newJumble;
+	}
+
+	public async getUserStats(memberId: string): Promise<Jumble | null> {
+		const userStats =
+			this.users.get(memberId) ?? (await this.fetchUserStats(memberId));
+
+		if (userStats && !this.users.has(memberId)) {
+			this.users.set(memberId, userStats);
+		}
+
+		return userStats;
 	}
 
 	public async getLeaderboard(field: JumbleField, max: number) {
 		const orderBy = { [field]: field === "bestTime" ? "asc" : "desc" };
+		const where = { [field]: { gt: 0 } };
 		const query = {
+			where,
 			orderBy,
 			include: {
 				user: true,
@@ -152,7 +192,7 @@ export default class JumbleGameHandler {
 
 	public startJumble(channelId: string, message: Message, embed: EmbedBuilder) {
 		const gameContext = this.getJumbleGameContext(channelId);
-		if (!gameContext) return;
+		if (!gameContext || gameContext.status === JumbleStatus.STOPPED) return;
 
 		gameContext.message = message;
 		gameContext.embed = embed;
@@ -268,28 +308,36 @@ export default class JumbleGameHandler {
 		}
 	}
 
-	private async addPoints(userId: string, points: number) {
+	private async updateUserStats(memberId: string, updateData: Partial<Jumble>) {
+		const userStats = await this.getUserStats(memberId);
+		if (!userStats) return;
+
+		Object.assign(userStats, updateData);
+
 		await container.db.jumble.update({
 			where: {
-				userId: userId,
+				id: userStats.id,
 			},
-			data: {
-				points: {
-					increment: points,
-				},
-			},
+			data: updateData,
 		});
+
+		this.users.set(memberId, userStats);
 	}
 
-	private async setBestTime(userId: string, time: number) {
-		await container.db.jumble.update({
-			where: {
-				userId: userId,
-			},
-			data: {
-				bestTime: time,
-			},
-		});
+	public async addPlay(memberId: string, plays: number) {
+		const userStats = await this.getUserStats(memberId);
+		if (!userStats) return;
+		await this.updateUserStats(memberId, { plays: userStats.plays + plays });
+	}
+
+	private async addPoints(memberId: string, points: number) {
+		const userStats = await this.getUserStats(memberId);
+		if (!userStats) return;
+		await this.updateUserStats(memberId, { points: userStats.points + points });
+	}
+
+	private async setBestTime(memberId: string, time: number) {
+		await this.updateUserStats(memberId, { bestTime: time });
 	}
 
 	private async addHint(gameContext: JumbleGameContext) {
@@ -392,32 +440,16 @@ export default class JumbleGameHandler {
 		gameContext.status = JumbleStatus.WINNER;
 		collector.stop();
 
-		const userData = await container.db.user.findUnique({
-			where: { discordId: winnerId },
-			select: {
-				id: true,
-				Jumble: true,
-			},
-		});
+		const userData = await this.getUserStats(winnerId);
 
-		if (!userData || !userData.Jumble) {
-			const embed = new EmbedBuilder()
-				.setDescription(
-					"Use o comando /lastfm para registrar sua conta antes de jogar.",
-				)
-				.setColor(embedColors.default);
+		if (!userData) return;
 
-			await message.channel.send({ embeds: [embed] });
+		await this.addPoints(winnerId, 1);
 
-			return;
-		}
-
-		await this.addPoints(userData.id, 1);
-
-		const bestTime = userData.Jumble.bestTime;
+		const bestTime = userData.bestTime;
 
 		if (bestTime <= 0 || seconds < bestTime) {
-			await this.setBestTime(userData.id, seconds);
+			await this.setBestTime(winnerId, seconds);
 		}
 
 		const embed = new EmbedBuilder()
@@ -456,7 +488,7 @@ export default class JumbleGameHandler {
 
 	private async finishGame(channelId: string) {
 		const gameContext = this.getJumbleGameContext(channelId);
-		this.deleteJamGame(channelId);
+		this.deleteJumbleGame(channelId);
 
 		if (!gameContext) return;
 
