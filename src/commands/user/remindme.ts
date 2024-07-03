@@ -1,3 +1,4 @@
+import { maxTimeInSeconds } from "@/utils/contants.js";
 import { Command } from "@sapphire/framework";
 import type { GuildMember, TextChannel } from "discord.js";
 
@@ -14,7 +15,7 @@ export class RemindMeCommand extends Command {
 				.addNumberOption((option) => {
 					option.setName("minutes");
 					option.setDescription("Tempo em minutos");
-					option.setMaxValue(60);
+					option.setMaxValue(maxTimeInSeconds);
 					option.setMinValue(1);
 					option.setRequired(false);
 					return option;
@@ -34,7 +35,7 @@ export class RemindMeCommand extends Command {
 		if (!member || !interaction.channel) return;
 
 		const time = interaction.options.getNumber("minutes") || 15;
-		const minutes = Math.max(Math.min(time, 180), 1);
+		const minutes = Math.max(Math.min(time, maxTimeInSeconds), 1);
 
 		const ms = minutes * 60000;
 		const message =

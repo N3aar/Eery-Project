@@ -8,6 +8,8 @@ export const embedColors = {
 
 export const adminPermission = 8;
 
+export const maxTimeInSeconds = 180;
+
 export const defaultTimeZone = "America/Sao_Paulo";
 
 export const leaderboardIcon = "https://i.imgur.com/qpb2q9S.png";
