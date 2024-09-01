@@ -1,6 +1,6 @@
 # Eery bot
 
-Eery bot for União Sinistra Discord server.
+Eery bot for Private Discord server.
 
 ## Installation
 
