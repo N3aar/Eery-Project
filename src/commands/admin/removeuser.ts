@@ -1,7 +1,7 @@
 import { adminPermission, eventTypes } from "@/utils/contants.js";
 import { Command } from "@sapphire/framework";
 
-export class RemoveBirthdayCommand extends Command {
+export class RemoveUserCommand extends Command {
 	public constructor(context: Command.LoaderContext, options: Command.Options) {
 		super(context, { ...options });
 	}
@@ -9,12 +9,12 @@ export class RemoveBirthdayCommand extends Command {
 	public override registerApplicationCommands(registry: Command.Registry) {
 		registry.registerChatInputCommand((builder) =>
 			builder
-				.setName("removebirthday")
-				.setDescription("Remover o aniversário de outro usuário")
+				.setName("removeuser")
+				.setDescription("Deletar os dados de outro usuário")
 				.setDefaultMemberPermissions(adminPermission)
 				.addUserOption((option) => {
 					option.setName("usuario");
-					option.setDescription("Usuário aniversariante");
+					option.setDescription("Usuário a ser deletado");
 					option.setRequired(true);
 					return option;
 				}),
@@ -26,15 +26,14 @@ export class RemoveBirthdayCommand extends Command {
 
 		if (!user) return;
 
-		await this.container.db.events.deleteMany({
+		await this.container.db.user.deleteMany({
 			where: {
-				type: eventTypes.BIRTHDAY,
-				createdBy: user.id,
+				discordId: user.id,
 			},
 		});
 
 		await interaction.reply({
-			content: "Aniversário removido com sucesso!",
+			content: "Usuário removido com sucesso!",
 			ephemeral: true,
 			fetchReply: false,
 		});
