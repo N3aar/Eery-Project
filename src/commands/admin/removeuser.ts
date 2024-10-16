@@ -12,7 +12,7 @@ export class RemoveUserCommand extends Command {
 				.setName("removeuser")
 				.setDescription("Deletar os dados de outro usuário")
 				.setDefaultMemberPermissions(adminPermission)
-				.addUserOption((option) => {
+				.addStringOption((option) => {
 					option.setName("usuario");
 					option.setDescription("Usuário a ser deletado");
 					option.setRequired(true);
@@ -22,13 +22,13 @@ export class RemoveUserCommand extends Command {
 	}
 
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-		const user = interaction.options.getUser("usuario");
+		const userId = interaction.options.getString("usuario");
 
-		if (!user) return;
+		if (!userId) return;
 
 		await this.container.db.user.deleteMany({
 			where: {
-				discordId: user.id,
+				discordId: userId,
 			},
 		});
 

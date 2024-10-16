@@ -12,7 +12,7 @@ export class RemoveBirthdayCommand extends Command {
 				.setName("removebirthday")
 				.setDescription("Remover o aniversário de outro usuário")
 				.setDefaultMemberPermissions(adminPermission)
-				.addUserOption((option) => {
+				.addStringOption((option) => {
 					option.setName("usuario");
 					option.setDescription("Usuário aniversariante");
 					option.setRequired(true);
@@ -22,14 +22,14 @@ export class RemoveBirthdayCommand extends Command {
 	}
 
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-		const user = interaction.options.getUser("usuario");
+		const userId = interaction.options.getString("usuario");
 
-		if (!user) return;
+		if (!userId) return;
 
 		await this.container.db.events.deleteMany({
 			where: {
 				type: eventTypes.BIRTHDAY,
-				createdBy: user.id,
+				createdBy: userId,
 			},
 		});
 
