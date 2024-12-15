@@ -88,7 +88,8 @@ export default async function announceScheduledEvent() {
 		};
 
 		if (hasBirthdays) {
-			const random = birthdayVideos[Math.random() * birthdayVideos.length];
+			const random =
+				birthdayVideos[Math.floor(Math.random() * birthdayVideos.length)];
 
 			message.files = [
 				{
