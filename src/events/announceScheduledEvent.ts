@@ -1,5 +1,4 @@
 import { birthdayVideos } from "@/utils/contants.js";
-import { getRandomInt } from "@/utils/random.js";
 import { container } from "@sapphire/pieces";
 import type { MessageCreateOptions, TextChannel } from "discord.js";
 
@@ -89,7 +88,7 @@ export default async function announceScheduledEvent() {
 		};
 
 		if (hasBirthdays) {
-			const random = birthdayVideos[getRandomInt(0, birthdayVideos.length - 1)];
+			const random = birthdayVideos[Math.random() * birthdayVideos.length];
 
 			message.files = [
 				{
