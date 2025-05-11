@@ -30,7 +30,7 @@ export class JumbleCommand extends Command {
 			await interaction.reply({
 				content:
 					"Você não possui um registro! Envie uma mensagem no canal antes de executar este comando.",
-				ephemeral: true,
+				flags: ["Ephemeral"],
 				fetchReply: false,
 			});
 
@@ -66,7 +66,7 @@ export class JumbleCommand extends Command {
 
 			await interaction.reply({
 				embeds: [embed],
-				ephemeral: true,
+				flags: ["Ephemeral"],
 				fetchReply: false,
 			});
 

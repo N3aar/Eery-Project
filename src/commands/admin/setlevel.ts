@@ -52,7 +52,7 @@ export class SetLevelCommand extends Command {
 
 		await interaction.reply({
 			content: "Nivel do usuário definido com sucesso!",
-			ephemeral: true,
+			flags: ["Ephemeral"],
 			fetchReply: false,
 		});
 	}

@@ -19,6 +19,7 @@ import {
 	EmbedBuilder,
 	type InteractionCollector,
 	type Message,
+	TextChannel,
 } from "discord.js";
 import { discordTimestampFormats } from "../types/discordTypes.js";
 import type { ArtistData } from "../types/musicBrainzTypes.js";
@@ -409,7 +410,7 @@ export default class JumbleGameHandler {
 
 			interaction.reply({
 				embeds: [embed],
-				ephemeral: true,
+				flags: ["Ephemeral"],
 				fetchReply: false,
 			});
 
@@ -452,12 +453,16 @@ export default class JumbleGameHandler {
 			await this.setBestTime(winnerId, seconds);
 		}
 
+		const channel = message.channel;
+
 		const embed = new EmbedBuilder()
 			.setDescription(description)
 			.setFooter({ text: `Respondido em ${seconds}s` })
 			.setColor(embedColors.success);
 
-		message.channel.send({ embeds: [embed] });
+		if (channel instanceof TextChannel) {
+			channel.send({ embeds: [embed] });
+		}
 	}
 
 	private processInteraction(

@@ -4,13 +4,13 @@ import type { Daily } from "@prisma/client";
 import { container } from "@sapphire/pieces";
 import type { Client, TextChannel } from "discord.js";
 
-import goodAfternoonImages from "../shared/constants/good_afternoon.json" assert {
+import goodAfternoonImages from "../shared/constants/good_afternoon.json" with {
 	type: "json",
 };
-import goodMorningImages from "../shared/constants/good_morning.json" assert {
+import goodMorningImages from "../shared/constants/good_morning.json" with {
 	type: "json",
 };
-import goodNightImages from "../shared/constants/good_night.json" assert {
+import goodNightImages from "../shared/constants/good_night.json" with {
 	type: "json",
 };
 

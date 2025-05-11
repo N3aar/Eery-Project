@@ -1,7 +1,7 @@
 import { greetings, specialDates, timeRanges } from "@/utils/contants.js";
 import { capitalize } from "@/utils/stringFormat.js";
 import { container } from "@sapphire/pieces";
-import type { Message, User } from "discord.js";
+import { type Message, TextChannel, type User } from "discord.js";
 
 type currentDate = {
 	hours: number;
@@ -33,9 +33,10 @@ export default async function replyGreeting(message: Message): Promise<void> {
 
 	const { hours, day, month } = getCurrentDateTime();
 	const greeting = getGreeting(content, hours, day, month);
+	const channel = message.channel;
 
-	if (greeting) {
-		await message.channel.send(`${member.toString()} ${greeting}`);
+	if (greeting && channel instanceof TextChannel) {
+		await channel.send(`${member.toString()} ${greeting}`);
 	}
 }
 

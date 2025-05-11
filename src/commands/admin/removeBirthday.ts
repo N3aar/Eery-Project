@@ -35,7 +35,7 @@ export class RemoveBirthdayCommand extends Command {
 
 		await interaction.reply({
 			content: "Aniversário removido com sucesso!",
-			ephemeral: true,
+			flags: ["Ephemeral"],
 			fetchReply: false,
 		});
 	}

@@ -105,7 +105,7 @@ export class SetBirthdayCommand extends Command {
 
 		await interaction.reply({
 			content: "Aniversário definido com sucesso!",
-			ephemeral: true,
+			flags: ["Ephemeral"],
 			fetchReply: false,
 		});
 	}

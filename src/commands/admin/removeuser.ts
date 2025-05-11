@@ -34,7 +34,7 @@ export class RemoveUserCommand extends Command {
 
 		await interaction.reply({
 			content: "Usuário removido com sucesso!",
-			ephemeral: true,
+			flags: ["Ephemeral"],
 			fetchReply: false,
 		});
 	}

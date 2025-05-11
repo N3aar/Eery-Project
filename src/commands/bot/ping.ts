@@ -15,7 +15,7 @@ export class PingCommand extends Command {
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const msg = await interaction.reply({
 			content: "Pinging...",
-			ephemeral: true,
+			flags: ["Ephemeral"],
 			fetchReply: true,
 		});
 
