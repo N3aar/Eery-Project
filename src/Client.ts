@@ -6,7 +6,7 @@ import JumbleGameHandler from "./shared/handlers/JumbleGameHandler.js";
 import AnilistAPI from "./shared/integrations/AnilistAPI.js";
 import DiscordAPI from "./shared/integrations/DiscordAPI.js";
 import LastFmAPI from "./shared/integrations/LastFmAPI.js";
-import MusicBrainzAPI from "./shared/integrations/musicBrainzAPI.js";
+import MusicBrainzAPI from "./shared/integrations/MusicBrainzAPI.js";
 
 export class Client extends SapphireClient {
 	public constructor(options: ClientOptions) {
