@@ -1,5 +1,5 @@
 import BaseRequest from "@/shared/base/BaseRequest.js";
-import type { DiscordUser } from "../types/discordTypes.js";
+import type { DiscordRole, DiscordUser } from "../types/discordTypes.js";
 
 export default class DiscordAPI extends BaseRequest {
 	constructor() {
@@ -13,5 +13,14 @@ export default class DiscordAPI extends BaseRequest {
 
 	public async getUser(id: string): Promise<DiscordUser> {
 		return await this.get(`users/${id}`);
+	}
+
+	public async createRole(
+		guildId: string,
+		roleData: Partial<DiscordRole>,
+	): Promise<DiscordRole> {
+		return await this.post(`guilds/${guildId}/roles`, {
+			body: JSON.stringify(roleData),
+		});
 	}
 }

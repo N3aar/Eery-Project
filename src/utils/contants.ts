@@ -6,6 +6,8 @@ export const embedColors = {
 	success: 0x1ed762,
 };
 
+export const regexHex = /[0-9a-fA-F]{6}/g;
+
 export const adminPermission = 8;
 
 export const maxTimeInSeconds = 180;
