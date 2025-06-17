@@ -25,7 +25,7 @@ export class ColorCommand extends Command {
 					option.setRequired(true);
 					return option;
 				})
-        .addStringOption((option) => {
+				.addStringOption((option) => {
 					option.setName("secondary_color");
 					option.setDescription("Cor secundária em hexadecimal");
 					option.setMaxLength(7);
@@ -52,51 +52,60 @@ export class ColorCommand extends Command {
 		return rolesWithColor;
 	}
 
-  public removeHash(text: string) {
-    return text.replaceAll('#', '');
-  }
-
-	public findRoleWithColor(roles: Collection<string, Role>, colorOne: string, colorTwo?: string | null) {
-		return roles.find((role) => {
-      const name = role.name;
-      const matches = name.match(regexHex);
-
-      if (!matches?.length) return false;
-
-      const [colorRoleOne, colorRoleTwo] = matches;
-      const matchColorOne = colorRoleOne === colorOne;
-      const matchColorTwo = (colorTwo && colorRoleTwo) ? (colorRoleTwo === colorTwo) : true;
-
-      return matchColorOne && matchColorTwo;
-    });
+	public removeHash(text: string) {
+		return text.replaceAll("#", "");
 	}
 
-	public hasCurrentColor(roles: Collection<string, Role>, colorOne: string, colorTwo?: string | null) {
+	public findRoleWithColor(
+		roles: Collection<string, Role>,
+		colorOne: string,
+		colorTwo?: string | null,
+	) {
+		return roles.find((role) => {
+			const name = role.name;
+			const matches = name.match(regexHex);
+
+			if (!matches?.length) return false;
+
+			const [colorRoleOne, colorRoleTwo] = matches;
+			const matchColorOne = colorRoleOne === colorOne;
+			const matchColorTwo =
+				colorTwo && colorRoleTwo ? colorRoleTwo === colorTwo : true;
+
+			return matchColorOne && matchColorTwo;
+		});
+	}
+
+	public hasCurrentColor(
+		roles: Collection<string, Role>,
+		colorOne: string,
+		colorTwo?: string | null,
+	) {
 		return !!this.findRoleWithColor(roles, colorOne, colorTwo);
 	}
 
-  public patternColor(colorOne: string, colorTwo: string) {
-    return `[ ${colorOne} | ${colorTwo} ]`;
-  }
+	public patternColor(colorOne: string, colorTwo: string) {
+		return `[ ${colorOne} | ${colorTwo} ]`;
+	}
 
 	public async createNewRoleWithColor(
 		guild: Guild,
 		name: string,
 		decimalColorPrimary: number,
-    decimalColorSecondary: number | null
+		decimalColorSecondary: number | null,
 	) {
 		return await this.container.discordAPI.createRole(guild.id, {
-      name,
-      color: decimalColorPrimary,
-      colors: {
-        primary_color: decimalColorPrimary,
-        secondary_color: decimalColorSecondary,
-        tertiary_color: null
-      },
-      hoist: false,
-      mentionable: false,
-      permissions: '0'
-    });
+			name,
+			color: decimalColorPrimary,
+			colors: {
+				primary_color: decimalColorPrimary,
+				secondary_color: decimalColorSecondary,
+				tertiary_color: null,
+			},
+			hoist: false,
+			mentionable: false,
+			permissions: "0",
+		});
 	}
 
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
@@ -104,7 +113,7 @@ export class ColorCommand extends Command {
 		if (!member) return;
 
 		const colorPrimary = interaction.options.getString("primary_color");
-    const colorSecondary = interaction.options.getString("secondary_color");
+		const colorSecondary = interaction.options.getString("secondary_color");
 
 		if (!colorPrimary || !this.isHexColor(colorPrimary)) {
 			return interaction.reply({
@@ -136,14 +145,25 @@ export class ColorCommand extends Command {
 		if (!guild || !colorPrimary) return;
 
 		const existentRole =
-			guild.roles && this.findRoleWithColor(guild.roles.cache, colorPrimary, colorSecondary);
+			guild.roles &&
+			this.findRoleWithColor(guild.roles.cache, colorPrimary, colorSecondary);
 
-    const name = colorPrimary
-		const decimalColorPrimary = Number.parseInt(colorPrimary.replace("#", ""), 16);
-    const decimalColorSecondary = colorSecondary ? Number.parseInt(colorSecondary.replace("#", ""), 16) : null;
+		const name = colorPrimary;
+		const decimalColorPrimary = Number.parseInt(
+			colorPrimary.replace("#", ""),
+			16,
+		);
+		const decimalColorSecondary = colorSecondary
+			? Number.parseInt(colorSecondary.replace("#", ""), 16)
+			: null;
 		const newRole =
 			existentRole ??
-			(await this.createNewRoleWithColor(guild, name, decimalColorPrimary, decimalColorSecondary));
+			(await this.createNewRoleWithColor(
+				guild,
+				name,
+				decimalColorPrimary,
+				decimalColorSecondary,
+			));
 
 		roles.add(newRole.id);
 

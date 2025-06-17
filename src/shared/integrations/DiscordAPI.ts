@@ -15,8 +15,12 @@ export default class DiscordAPI extends BaseRequest {
 		return await this.get(`users/${id}`);
 	}
 
-  public async createRole(guildId: string, roleData: Partial<DiscordRole>): Promise<DiscordRole> {
-    return await this.post(`guilds/${guildId}/roles`, { body: JSON.stringify(roleData) });
-  }
+	public async createRole(
+		guildId: string,
+		roleData: Partial<DiscordRole>,
+	): Promise<DiscordRole> {
+		return await this.post(`guilds/${guildId}/roles`, {
+			body: JSON.stringify(roleData),
+		});
+	}
 }
-
