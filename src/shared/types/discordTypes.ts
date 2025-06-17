@@ -11,3 +11,17 @@ export enum discordTimestampFormats {
 export type DiscordUser = {
 	banner: string | null;
 };
+
+export type DiscordRole = {
+  id: string,
+  name: string;
+  permissions: string;
+  color: number;
+  colors: {
+    primary_color: number,
+    secondary_color: number | null,
+    tertiary_color: number | null
+  }
+  hoist: boolean;
+  mentionable: boolean;
+}

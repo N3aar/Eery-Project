@@ -1,3 +1,4 @@
+import { regexHex } from "@/utils/contants.js";
 import { Command } from "@sapphire/framework";
 import type {
 	Collection,
@@ -17,19 +18,26 @@ export class ColorCommand extends Command {
 				.setName("color")
 				.setDescription("Trocar a cor do seu cargo")
 				.addStringOption((option) => {
-					option.setName("color");
-					option.setDescription("Cor em hexadecimal");
+					option.setName("primary_color");
+					option.setDescription("Cor primária em hexadecimal");
 					option.setMaxLength(7);
 					option.setMinLength(6);
 					option.setRequired(true);
+					return option;
+				})
+        .addStringOption((option) => {
+					option.setName("secondary_color");
+					option.setDescription("Cor secundária em hexadecimal");
+					option.setMaxLength(7);
+					option.setMinLength(6);
+					option.setRequired(false);
 					return option;
 				}),
 		);
 	}
 
 	public isHexColor(color: string) {
-		const hexPattern = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/;
-		return hexPattern.test(color);
+		return regexHex.test(color);
 	}
 
 	public findCurrentColorRoles(roles: IterableIterator<Role>) {
@@ -44,35 +52,61 @@ export class ColorCommand extends Command {
 		return rolesWithColor;
 	}
 
-	public findRoleWithColor(roles: Collection<string, Role>, color: string) {
-		return roles.find((role) => role.name === color);
+  public removeHash(text: string) {
+    return text.replaceAll('#', '');
+  }
+
+	public findRoleWithColor(roles: Collection<string, Role>, colorOne: string, colorTwo?: string | null) {
+		return roles.find((role) => {
+      const name = role.name;
+      const matches = name.match(regexHex);
+
+      if (!matches?.length) return false;
+
+      const [colorRoleOne, colorRoleTwo] = matches;
+      const matchColorOne = colorRoleOne === colorOne;
+      const matchColorTwo = (colorTwo && colorRoleTwo) ? (colorRoleTwo === colorTwo) : true;
+
+      return matchColorOne && matchColorTwo;
+    });
 	}
 
-	public hasCurrentColor(roles: Collection<string, Role>, color: string) {
-		return roles.some((role) => role.name === color);
+	public hasCurrentColor(roles: Collection<string, Role>, colorOne: string, colorTwo?: string | null) {
+		return !!this.findRoleWithColor(roles, colorOne, colorTwo);
 	}
 
-	public createNewRoleWithColor(
+  public patternColor(colorOne: string, colorTwo: string) {
+    return `[ ${colorOne} | ${colorTwo} ]`;
+  }
+
+	public async createNewRoleWithColor(
 		guild: Guild,
-		color: string,
-		decimalColor: number,
+		name: string,
+		decimalColorPrimary: number,
+    decimalColorSecondary: number | null
 	) {
-		return guild.roles.create({
-			name: color,
-			color: decimalColor,
-			mentionable: false,
-			permissions: BigInt(0),
-		});
+		return await this.container.discordAPI.createRole(guild.id, {
+      name,
+      color: decimalColorPrimary,
+      colors: {
+        primary_color: decimalColorPrimary,
+        secondary_color: decimalColorSecondary,
+        tertiary_color: null
+      },
+      hoist: false,
+      mentionable: false,
+      permissions: '0'
+    });
 	}
 
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
 		const member = interaction.member;
 		if (!member) return;
 
-		const color = interaction.options.getString("color");
-		const hex = color?.startsWith("#") ? color : `#${color}`;
+		const colorPrimary = interaction.options.getString("primary_color");
+    const colorSecondary = interaction.options.getString("secondary_color");
 
-		if (!this.isHexColor(hex)) {
+		if (!colorPrimary || !this.isHexColor(colorPrimary)) {
 			return interaction.reply({
 				content: "Digite uma cor válida!",
 				ephemeral: false,
@@ -81,7 +115,7 @@ export class ColorCommand extends Command {
 		}
 
 		const roles = member?.roles as GuildMemberRoleManager;
-		if (this.hasCurrentColor(roles.cache, hex)) {
+		if (this.hasCurrentColor(roles.cache, colorPrimary, colorSecondary)) {
 			return interaction.reply({
 				content: "Você já possui esta cor!",
 				ephemeral: false,
@@ -99,17 +133,19 @@ export class ColorCommand extends Command {
 		}
 
 		const guild = interaction.guild;
-		if (!guild || !color) return;
+		if (!guild || !colorPrimary) return;
 
 		const existentRole =
-			guild.roles && this.findRoleWithColor(guild.roles.cache, color);
+			guild.roles && this.findRoleWithColor(guild.roles.cache, colorPrimary, colorSecondary);
 
-		const decimalColor = Number.parseInt(color.replace("#", ""), 16);
+    const name = colorPrimary
+		const decimalColorPrimary = Number.parseInt(colorPrimary.replace("#", ""), 16);
+    const decimalColorSecondary = colorSecondary ? Number.parseInt(colorSecondary.replace("#", ""), 16) : null;
 		const newRole =
 			existentRole ??
-			(await this.createNewRoleWithColor(guild, hex, decimalColor));
+			(await this.createNewRoleWithColor(guild, name, decimalColorPrimary, decimalColorSecondary));
 
-		roles.add(newRole);
+		roles.add(newRole.id);
 
 		await interaction.reply({
 			content: "Cor definida com sucesso!",
