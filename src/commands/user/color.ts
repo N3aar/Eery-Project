@@ -85,7 +85,7 @@ export class ColorCommand extends Command {
 	}
 
 	public patternColor(colorOne: string, colorTwo: string) {
-		return `[ ${colorOne} | ${colorTwo} ]`;
+		return `[ ${this.removeHash(colorOne)} | ${this.removeHash(colorTwo)} ]`;
 	}
 
 	public async createNewRoleWithColor(
@@ -148,13 +148,15 @@ export class ColorCommand extends Command {
 			guild.roles &&
 			this.findRoleWithColor(guild.roles.cache, colorPrimary, colorSecondary);
 
-		const name = colorPrimary;
+		const name = colorSecondary
+			? this.patternColor(colorPrimary, colorSecondary)
+			: this.removeHash(colorPrimary);
 		const decimalColorPrimary = Number.parseInt(
-			colorPrimary.replace("#", ""),
+			this.removeHash(colorPrimary),
 			16,
 		);
 		const decimalColorSecondary = colorSecondary
-			? Number.parseInt(colorSecondary.replace("#", ""), 16)
+			? Number.parseInt(this.removeHash(colorSecondary), 16)
 			: null;
 		const newRole =
 			existentRole ??
