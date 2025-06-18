@@ -18,7 +18,7 @@ export class ColorCommand extends Command {
 				.setName("color")
 				.setDescription("Trocar a cor do seu cargo")
 				.addStringOption((option) => {
-					option.setName("primary_color");
+					option.setName("color");
 					option.setDescription("Cor primária em hexadecimal");
 					option.setMaxLength(7);
 					option.setMinLength(6);
@@ -26,7 +26,7 @@ export class ColorCommand extends Command {
 					return option;
 				})
 				.addStringOption((option) => {
-					option.setName("secondary_color");
+					option.setName("second_color");
 					option.setDescription("Cor secundária em hexadecimal");
 					option.setMaxLength(7);
 					option.setMinLength(6);
@@ -112,8 +112,8 @@ export class ColorCommand extends Command {
 		const member = interaction.member;
 		if (!member) return;
 
-		const colorPrimary = interaction.options.getString("primary_color");
-		const colorSecondary = interaction.options.getString("secondary_color");
+		const colorPrimary = interaction.options.getString("color");
+		const colorSecondary = interaction.options.getString("second_color");
 
 		if (!colorPrimary || !this.isHexColor(colorPrimary)) {
 			return interaction.reply({
