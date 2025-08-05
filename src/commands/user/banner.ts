@@ -42,8 +42,8 @@ export class BannerCommand extends Command {
 		if (!bannerHash) {
 			return interaction.reply({
 				content: "Usuário não possui um banner!",
-				ephemeral: false,
-				fetchReply: false,
+				flags: ["Ephemeral"],
+				withResponse: false,
 			});
 		}
 
@@ -54,8 +54,8 @@ export class BannerCommand extends Command {
 
 		await interaction.reply({
 			embeds: [embed],
-			ephemeral: false,
-			fetchReply: false,
+			flags: ["Ephemeral"],
+			withResponse: false,
 		});
 	}
 }

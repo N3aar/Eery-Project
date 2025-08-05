@@ -1,6 +1,25 @@
-# Eery bot
+# Eery bot 🤖
 
-Eery bot for Private Discord server.
+A feature-rich Discord bot designed for private servers with entertainment, utility, and community engagement features.
+
+## ✨ Features
+
+### 🎮 Games & Entertainment
+
+- **Jumble** - Music guessing game powered by Last.fm integration
+- **AniList Integration** - Search and discover anime and manga information
+
+### 🏆 Community System
+
+- **Experience & Leveling** - Track user activity with an engaging XP system
+- **Custom Color Roles** - Personalized roles with gradient color support
+- **Birthday Announcements** - Never miss a community member's special day
+
+### 🛠️ Utility Commands
+
+- **Avatar & Banner** - Display user avatars and server banners
+- **Remind Me** - Schedule personal reminders and notes
+- **Daily Announcements** - Automated "good morning" and "good night" messages with configurable images
 
 ## Installation
 
@@ -60,7 +79,6 @@ pnpm lint:fix
 ### Commit message
 
 This project uses [Conventional Commits](https://www.conventionalcommits.org/en/v1.0.0/) to standardize the commit messages.
-
 
 ## License
 

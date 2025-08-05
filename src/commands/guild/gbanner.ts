@@ -28,8 +28,8 @@ export class GuildBannerCommand extends Command {
 		if (!guildIcon) {
 			return interaction.reply({
 				content: "Servidor não possui um Banner!",
-				ephemeral: false,
-				fetchReply: false,
+				flags: ["Ephemeral"],
+				withResponse: false,
 			});
 		}
 
@@ -40,8 +40,8 @@ export class GuildBannerCommand extends Command {
 
 		await interaction.reply({
 			embeds: [embed],
-			ephemeral: false,
-			fetchReply: false,
+			flags: ["Ephemeral"],
+			withResponse: false,
 		});
 	}
 }

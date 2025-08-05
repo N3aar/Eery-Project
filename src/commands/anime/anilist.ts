@@ -70,8 +70,8 @@ export class AnilistCommand extends Command {
 			return interaction.reply({
 				content:
 					"Contéudo Adulto. Utilize comando novamente em um canal com restrição de idade!",
-				ephemeral: false,
-				fetchReply: false,
+				flags: ["Ephemeral"],
+				withResponsese: false,
 			});
 		}
 
@@ -83,8 +83,8 @@ export class AnilistCommand extends Command {
 
 		await interaction.reply({
 			embeds: [embed],
-			ephemeral: false,
-			fetchReply: false,
+			flags: ["Ephemeral"],
+			withResponse: false,
 		});
 	}
 

@@ -48,8 +48,8 @@ export class BirthdayCommand extends Command {
 		if (!birthdays || birthdays.length <= 0) {
 			await interaction.reply({
 				content: "Não há aniversários neste mês!",
-				ephemeral: false,
-				fetchReply: false,
+				flags: ["Ephemeral"],
+				withResponse: false,
 			});
 			return;
 		}
@@ -69,8 +69,8 @@ export class BirthdayCommand extends Command {
 
 		await interaction.reply({
 			embeds: [embed],
-			ephemeral: false,
-			fetchReply: false,
+			flags: ["Ephemeral"],
+			withResponse: false,
 		});
 	}
 }

@@ -42,7 +42,7 @@ export class RemoveLastFmCommand extends Command {
 				content:
 					"Username não encontrado, não há ninguém vinculado a esta conta!",
 				flags: ["Ephemeral"],
-				fetchReply: false,
+				withResponse: false,
 			});
 
 			return;
@@ -58,7 +58,7 @@ export class RemoveLastFmCommand extends Command {
 		await interaction.reply({
 			content: "Username removido com sucesso!",
 			flags: ["Ephemeral"],
-			fetchReply: false,
+			withResponse: false,
 		});
 	}
 }

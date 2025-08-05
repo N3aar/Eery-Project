@@ -13,14 +13,19 @@ export class PingCommand extends Command {
 	}
 
 	public async chatInputRun(interaction: Command.ChatInputCommandInteraction) {
-		const msg = await interaction.reply({
+		const response = await interaction.reply({
 			content: "Pinging...",
 			flags: ["Ephemeral"],
-			fetchReply: true,
+			withResponse: true,
 		});
 
-		if (isMessageInstance(msg)) {
-			const diff = msg.createdTimestamp - interaction.createdTimestamp;
+		if (!response) return;
+
+		const interactionReply = response.interaction;
+
+		if (interactionReply) {
+			const createdTimestamp = interactionReply.createdTimestamp;
+			const diff = createdTimestamp - interaction.createdTimestamp;
 			const ping = Math.round(this.container.client.ws.ping);
 			return interaction.editReply(
 				`Pong 🏓!\nDifereça: \`${diff}\`. API: \`${ping}\``,

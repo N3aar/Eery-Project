@@ -98,8 +98,8 @@ export class BirthdayCommand extends Command {
 
 		await interaction.reply({
 			content: "Aniversário definido com sucesso!",
-			ephemeral: false,
-			fetchReply: false,
+			flags: ["Ephemeral"],
+			withResponse: false,
 		});
 	}
 }

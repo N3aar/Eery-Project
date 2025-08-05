@@ -53,8 +53,8 @@ export class RemindMeCommand extends Command {
 			content: `Irei te lembrar em \`${minutes}\` Minuto${
 				minutes > 1 ? "s" : ""
 			}!`,
-			ephemeral: false,
-			fetchReply: false,
+			flags: ["Ephemeral"],
+			withResponse: false,
 		});
 	}
 }

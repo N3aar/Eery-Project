@@ -48,8 +48,8 @@ export class EventsCommand extends Command {
 		if (events.length <= 0) {
 			await interaction.reply({
 				content: "Não há eventos agendados nesta página!",
-				ephemeral: false,
-				fetchReply: false,
+				flags: ["Ephemeral"],
+				withResponse: false,
 			});
 			return;
 		}
@@ -70,8 +70,8 @@ export class EventsCommand extends Command {
 
 		await interaction.reply({
 			embeds: [embed],
-			ephemeral: false,
-			fetchReply: false,
+			flags: ["Ephemeral"],
+			withResponse: false,
 		});
 	}
 }

@@ -118,8 +118,8 @@ export class ColorCommand extends Command {
 		if (!colorPrimary || !this.isHexColor(colorPrimary)) {
 			return interaction.reply({
 				content: "Digite uma cor válida!",
-				ephemeral: false,
-				fetchReply: false,
+				flags: ["Ephemeral"],
+				withResponse: false,
 			});
 		}
 
@@ -127,8 +127,8 @@ export class ColorCommand extends Command {
 		if (this.hasCurrentColor(roles.cache, colorPrimary, colorSecondary)) {
 			return interaction.reply({
 				content: "Você já possui esta cor!",
-				ephemeral: false,
-				fetchReply: false,
+				flags: ["Ephemeral"],
+				withResponse: false,
 			});
 		}
 
@@ -171,8 +171,8 @@ export class ColorCommand extends Command {
 
 		await interaction.reply({
 			content: "Cor definida com sucesso!",
-			ephemeral: false,
-			fetchReply: false,
+			flags: ["Ephemeral"],
+			withResponse: false,
 		});
 	}
 }

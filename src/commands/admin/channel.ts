@@ -39,7 +39,7 @@ export class ChannelCommand extends Command {
 		await interaction.reply({
 			content: "Canal definido com sucesso!",
 			flags: ["Ephemeral"],
-			fetchReply: false,
+			withResponse: false,
 		});
 	}
 }

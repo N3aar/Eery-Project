@@ -411,7 +411,7 @@ export default class JumbleGameHandler {
 			interaction.reply({
 				embeds: [embed],
 				flags: ["Ephemeral"],
-				fetchReply: false,
+				withResponse: false,
 			});
 
 			return;

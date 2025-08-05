@@ -56,8 +56,8 @@ export class JBStatsCommand extends Command {
 
 			await interaction.reply({
 				embeds: [embed],
-				ephemeral: false,
-				fetchReply: false,
+				flags: ["Ephemeral"],
+				withResponse: false,
 			});
 
 			return;
@@ -89,8 +89,8 @@ export class JBStatsCommand extends Command {
 
 		await interaction.reply({
 			embeds: [embed],
-			ephemeral: false,
-			fetchReply: false,
+			flags: ["Ephemeral"],
+			withResponse: false,
 		});
 	}
 }

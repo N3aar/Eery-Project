@@ -81,8 +81,8 @@ export class EventCommand extends Command {
 
 		await interaction.reply({
 			content: "Evento agendado com sucesso!",
-			ephemeral: false,
-			fetchReply: false,
+			flags: ["Ephemeral"],
+			withResponse: false,
 		});
 	}
 }

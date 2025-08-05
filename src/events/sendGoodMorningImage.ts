@@ -1,4 +1,3 @@
-import { parse } from "node:url";
 import { periods } from "@/utils/contants.js";
 import type { Daily } from "@prisma/client";
 import { container } from "@sapphire/pieces";

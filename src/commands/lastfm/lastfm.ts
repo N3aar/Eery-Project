@@ -45,8 +45,8 @@ export class LastFmCommand extends Command {
 
 			await interaction.reply({
 				embeds: [embed],
-				ephemeral: false,
-				fetchReply: false,
+				flags: ["Ephemeral"],
+				withResponse: false,
 			});
 
 			return;
@@ -74,8 +74,8 @@ export class LastFmCommand extends Command {
 
 		await interaction.reply({
 			content: "Conta registrada com sucesso!",
-			ephemeral: false,
-			fetchReply: false,
+			flags: ["Ephemeral"],
+			withResponse: false,
 		});
 	}
 }

@@ -31,7 +31,7 @@ export class JumbleCommand extends Command {
 				content:
 					"Você não possui um registro! Envie uma mensagem no canal antes de executar este comando.",
 				flags: ["Ephemeral"],
-				fetchReply: false,
+				withResponse: false,
 			});
 
 			return;
@@ -48,8 +48,8 @@ export class JumbleCommand extends Command {
 
 			await interaction.reply({
 				embeds: [embed],
-				ephemeral: false,
-				fetchReply: false,
+				flags: ["Ephemeral"],
+				withResponse: false,
 			});
 
 			return;
@@ -67,7 +67,7 @@ export class JumbleCommand extends Command {
 			await interaction.reply({
 				embeds: [embed],
 				flags: ["Ephemeral"],
-				fetchReply: false,
+				withResponse: false,
 			});
 
 			return;
@@ -92,8 +92,8 @@ export class JumbleCommand extends Command {
 		if (!randomArtist) {
 			await interaction.reply({
 				content: "Nenhum artista encontrado!",
-				ephemeral: false,
-				fetchReply: false,
+				flags: ["Ephemeral"],
+				withResponse: false,
 			});
 
 			this.container.jumbleGameHandler.deleteJumbleGame(channelId);
@@ -117,8 +117,8 @@ export class JumbleCommand extends Command {
 		if (!gameContext) {
 			await interaction.reply({
 				content: "Não foi possível iniciar este Jumble, tente novamente!",
-				ephemeral: false,
-				fetchReply: false,
+				flags: ["Ephemeral"],
+				withResponse: false,
 			});
 
 			this.container.jumbleGameHandler.deleteJumbleGame(channelId);
@@ -149,19 +149,25 @@ export class JumbleCommand extends Command {
 				},
 			]);
 
-		const message = await interaction.reply({
+		const response = await interaction.reply({
 			embeds: [embed],
 			components: [row],
-			ephemeral: false,
-			fetchReply: true,
+			flags: ["Ephemeral"],
+			withResponse: true,
 		});
 
+		if (!response) return;
+
+		const resource = response.resource;
+		const message = resource?.message;
+
+		if (!message) {
+			channel.send("Um erro ocorreu durante o processamento do comando.");
+			return;
+		}
+
 		this.container.jumbleGameHandler.addPlay(member.id, 1);
-		this.container.jumbleGameHandler.startJumble(
-			message.channel.id,
-			message,
-			embed,
-		);
+		this.container.jumbleGameHandler.startJumble(channel.id, message, embed);
 	}
 
 	private chooseRandomArtist(artists: UserArtistData[]) {

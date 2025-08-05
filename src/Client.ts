@@ -1,4 +1,4 @@
-import ExpHandler from "@/shared/handlers/xpHandler.js";
+import ExpHandler from "@/shared/handlers/XpHandler.js";
 import { PrismaClient } from "@prisma/client";
 import { SapphireClient, container } from "@sapphire/framework";
 import type { ClientOptions } from "discord.js";
