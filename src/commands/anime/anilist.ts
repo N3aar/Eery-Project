@@ -71,7 +71,7 @@ export class AnilistCommand extends Command {
 				content:
 					"Contéudo Adulto. Utilize comando novamente em um canal com restrição de idade!",
 				flags: ["Ephemeral"],
-				withResponsese: false,
+				withResponse: false,
 			});
 		}
 
