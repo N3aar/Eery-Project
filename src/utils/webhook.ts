@@ -27,7 +27,7 @@ export async function getOrCreateWebhook(
 
 	const newWebhook = await channel.createWebhook({
 		name: WEBHOOK_NAME,
-		reason: "URL Helper - Webhook único por canal",
+		reason: "URL Helper - One webhook per channel",
 	});
 
 	channelWebhooks.set(channelId, newWebhook);
