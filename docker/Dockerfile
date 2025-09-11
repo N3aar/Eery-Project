@@ -1,8 +1,9 @@
-FROM node:20-alpine as builder
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-ENV ALLOW_MIGRATIONS false
+ARG ALLOW_MIGRATIONS=false
+ENV ALLOW_MIGRATIONS=${ALLOW_MIGRATIONS}
 RUN apk add --no-cache openssl
 
 COPY package.json ./
@@ -19,9 +20,9 @@ COPY . .
 RUN pnpm generate
 RUN pnpm build
 
-FROM node:20-alpine as runner
+FROM node:20-alpine AS runner
 
-ENV TZ America/Sao_Paulo
+ENV TZ=America/Sao_Paulo
 
 RUN apk add --no-cache tzdata openssl
 RUN ln -s /usr/share/zoneinfo/${TZ} /etc/localtime
