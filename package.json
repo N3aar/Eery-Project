@@ -18,6 +18,7 @@
     "generate": "prisma generate",
     "prepare": "husky || true",
     "backup:pull": "node --env-file=.env scripts/pull_db",
+    "postinstall": "node scripts/postinstall",
     "docker:dev": "docker-compose -f compose.dev.yml up --verbose"
   },
   "devDependencies": {

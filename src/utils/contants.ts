@@ -8,6 +8,8 @@ export const embedColors = {
 
 export const regexHex = /[0-9a-fA-F]{6}/g;
 
+export const regexUrl = /(https?:\/\/[^\s]+)/g;
+
 export const regexUrlParams = /\?.*$/;
 
 export const adminPermission = 8;
