@@ -55,7 +55,7 @@ export default async function urlHelper(message: Message, retry = 0) {
 			return urlHelper(message, retry + 1);
 		}
 
-		console.error("Erro no URL Helper:", error);
+		console.error("Error in URL Helper:", error);
 		channelWebhooks.delete(message.channel.id);
 	}
 }
