@@ -24,21 +24,23 @@ export default async function urlHelper(message: Message, retry = 0) {
 	)
 		return;
 
-	const fixedUrls = urls.map((url) => {
-		let newUrl = url;
-		for (const [site, replacement] of fixes) {
-			if (newUrl.includes(site)) {
-				newUrl = newUrl.replace(site, replacement).replace(regexUrlParams, "");
+	const replacedContent = urls.reduce((acc, url) => {
+		for (const [site, fix] of fixes) {
+			if (url.includes(site)) {
+				const newUrl = url.replace(site, fix).replace(regexUrlParams, "");
+				return acc.replace(url, newUrl);
 			}
 		}
-		return newUrl;
-	});
+		return acc;
+	}, content);
+
+	if (replacedContent === content) return;
 
 	try {
 		const webhook = await getOrCreateWebhook(message.channel as TextChannel);
 
 		await webhook.send({
-			content: message.content.replace(regexUrl, () => fixedUrls.shift() || ""),
+			content: replacedContent,
 			username: message.member?.displayName ?? message.author.displayName,
 			avatarURL: message.author.displayAvatarURL({
 				forceStatic: false,

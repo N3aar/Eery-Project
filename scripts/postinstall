@@ -8,7 +8,6 @@ if (process.env.CI) {
 }
 
 try {
-    // Only run migrations if not in production, or if explicitly allowed
     const isProduction = process.env.NODE_ENV === "production";
     const allowMigrations = process.env.ALLOW_MIGRATIONS === "true";
     let command = "pnpm run prepare && prisma generate";
@@ -22,4 +21,3 @@ try {
     console.error("Postinstall script failed:", error);
     process.exit(1);
 }
-
