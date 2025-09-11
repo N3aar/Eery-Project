@@ -2,6 +2,7 @@ FROM node:20-alpine as builder
 
 WORKDIR /app
 
+ENV ALLOW_MIGRATIONS false
 RUN apk add --no-cache openssl
 
 COPY package.json ./
