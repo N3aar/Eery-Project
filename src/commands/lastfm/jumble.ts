@@ -152,7 +152,6 @@ export class JumbleCommand extends Command {
 		const response = await interaction.reply({
 			embeds: [embed],
 			components: [row],
-			flags: ["Ephemeral"],
 			withResponse: true,
 		});
 

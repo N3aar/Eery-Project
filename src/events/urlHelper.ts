@@ -1,4 +1,4 @@
-import { urlFixers } from "@/utils/contants.js";
+import { regexUrlParams, urlFixers } from "@/utils/contants.js";
 import type { Message } from "discord.js";
 
 export default async function urlHelper(message: Message) {
@@ -18,7 +18,7 @@ export default async function urlHelper(message: Message) {
 		let newUrl = url;
 		for (const [site, replacement] of fixes) {
 			if (newUrl.includes(site)) {
-				newUrl = newUrl.replace(site, replacement);
+				newUrl = newUrl.replace(site, replacement).replace(regexUrlParams, "");
 			}
 		}
 		return newUrl;

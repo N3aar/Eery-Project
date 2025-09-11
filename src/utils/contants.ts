@@ -8,6 +8,8 @@ export const embedColors = {
 
 export const regexHex = /[0-9a-fA-F]{6}/g;
 
+export const regexUrlParams = /\?.*$/;
+
 export const adminPermission = 8;
 
 export const maxTimeInSeconds = 180;
@@ -42,7 +44,7 @@ export const urlFixers = {
 	"https://x.com/": "https://vxtwitter.com/",
 	"https://vm.tiktok.com/": "https://vm.vxtiktok.com/",
 	"https://www.tiktok.com/": "https://www.vxtiktok.com/",
-	"https://www.instagram.com/": "https://g.ddinstagram.com/",
+	"https://www.instagram.com/": "https://instagramez.com/",
 	"https://www.reddit.com/": "https://rxddit.com/",
 } as const;
 
