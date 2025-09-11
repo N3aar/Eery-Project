@@ -8,6 +8,7 @@ RUN apk add --no-cache openssl
 COPY package.json ./
 COPY pnpm-lock.yaml ./
 COPY prisma ./prisma
+COPY scripts ./scripts
 
 RUN corepack enable && corepack prepare pnpm --activate
 
