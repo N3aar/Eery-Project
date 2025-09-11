@@ -1,0 +1,16 @@
+#!/usr/bin/env node
+
+import { execSync } from "node:child_process";
+
+if (process.env.CI) {
+    console.log("CI environment detected, skipping postinstall script.");
+    process.exit(0);
+}
+
+try {
+    execSync("pnpm run prepare && prisma generate && prisma migrate deploy", { stdio: "inherit" });
+} catch (error) {
+    console.error("Postinstall script failed:", error);
+    process.exit(1);
+}
+
