@@ -8,7 +8,16 @@ if (process.env.CI) {
 }
 
 try {
-    execSync("pnpm run prepare && prisma generate && prisma migrate deploy", { stdio: "inherit" });
+    // Only run migrations if not in production, or if explicitly allowed
+    const isProduction = process.env.NODE_ENV === "production";
+    const allowMigrations = process.env.ALLOW_MIGRATIONS === "true";
+    let command = "pnpm run prepare && prisma generate";
+    if (!isProduction || allowMigrations) {
+        command += " && prisma migrate deploy";
+    } else {
+        console.log("Production environment detected, skipping automatic database migrations. Set ALLOW_MIGRATIONS=true to override.");
+    }
+    execSync(command, { stdio: "inherit" });
 } catch (error) {
     console.error("Postinstall script failed:", error);
     process.exit(1);
