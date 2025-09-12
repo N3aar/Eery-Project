@@ -33,9 +33,7 @@ RUN apk add --no-cache \
     tzdata \
     openssl \
     dumb-init && \
-    ln -s /usr/share/zoneinfo/${TZ} /etc/localtime && \
-    addgroup -g 1001 -S nodejs && \
-    adduser -S nodejs -u 1001
+    ln -s /usr/share/zoneinfo/${TZ} /etc/localtime
 
 WORKDIR /app
 
@@ -51,9 +49,6 @@ RUN corepack enable && \
     npx prisma generate && \
     pnpm store prune && \
     rm -rf ~/.pnpm-store
-
-# Switch to non-root user
-USER nodejs
 
 VOLUME /data
 
