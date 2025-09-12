@@ -1,43 +1,64 @@
-FROM node:20-alpine as builder
+FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-ENV ALLOW_MIGRATIONS false
+ARG ALLOW_MIGRATIONS=false
+ENV ALLOW_MIGRATIONS=${ALLOW_MIGRATIONS}
 RUN apk add --no-cache openssl
 
-COPY package.json ./
-COPY pnpm-lock.yaml ./
+# Copy dependency files first for better caching
+COPY package.json pnpm-lock.yaml ./
 COPY prisma ./prisma
 COPY scripts ./scripts
 
 RUN corepack enable && corepack prepare pnpm --activate
 
-RUN pnpm install
+# Install dependencies
+RUN pnpm install --frozen-lockfile
 
+# Copy source code
 COPY . .
 
-RUN pnpm generate
-RUN pnpm build
+# Generate Prisma client and build
+RUN pnpm generate && pnpm build
 
-FROM node:20-alpine as runner
+# Production stage
+FROM node:20-alpine AS runner
 
-ENV TZ America/Sao_Paulo
+ENV TZ=America/Sao_Paulo
+ENV NODE_ENV=production
 
-RUN apk add --no-cache tzdata openssl
-RUN ln -s /usr/share/zoneinfo/${TZ} /etc/localtime
+# Install only required system dependencies
+RUN apk add --no-cache \
+    tzdata \
+    openssl \
+    dumb-init && \
+    ln -s /usr/share/zoneinfo/${TZ} /etc/localtime && \
+    addgroup -g 1001 -S nodejs && \
+    adduser -S nodejs -u 1001
 
 WORKDIR /app
 
-COPY --from=builder /app/package.json ./
-COPY --from=builder /app/pnpm-lock.yaml ./
-COPY --from=builder /app/dist ./dist
-COPY --from=builder /app/prisma ./prisma
+# Copy built application and required files
+COPY --from=builder --chown=nodejs:nodejs /app/dist ./dist
+COPY --from=builder --chown=nodejs:nodejs /app/prisma ./prisma
+COPY --from=builder --chown=nodejs:nodejs /app/package.json ./
+COPY --from=builder --chown=nodejs:nodejs /app/pnpm-lock.yaml ./
 
-RUN corepack enable
+# Install only production dependencies and generate Prisma client
+RUN corepack enable && \
+    pnpm install --prod --frozen-lockfile --ignore-scripts && \
+    npx prisma generate && \
+    pnpm store prune && \
+    rm -rf ~/.pnpm-store
 
-RUN pnpm install --prod
-RUN pnpm generate
+# Switch to non-root user
+USER nodejs
 
 VOLUME /data
 
-CMD ["pnpm", "start:prod"]
+# Simple entrypoint that checks for migrations
+ENTRYPOINT ["sh", "-c", "if [ \"$RUN_MIGRATIONS\" = \"true\" ]; then echo 'Running database migrations...'; npx prisma migrate deploy; fi; exec \"$@\"", "--"]
+
+# Default command (migrations can be enabled with RUN_MIGRATIONS=true)
+CMD ["node", "dist/index.js"]
