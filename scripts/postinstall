@@ -10,11 +10,10 @@ if (process.env.CI) {
 try {
     const isProduction = process.env.NODE_ENV === "production";
     const allowMigrations = process.env.ALLOW_MIGRATIONS === "true";
-    const skipMigrations = process.env.ALLOW_MIGRATIONS === "false";
 
     execSync("prisma generate", { stdio: "inherit" });
 
-    if (skipMigrations) {
+    if (!allowMigrations) {
         console.log("Docker build environment detected (ALLOW_MIGRATIONS=false), skipping database migrations.");
         process.exit(0);
     }
