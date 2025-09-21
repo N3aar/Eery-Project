@@ -6,6 +6,8 @@ services:
     env_file:
       - path: ./.env
         required: false
+    environment:
+      - RUN_MIGRATIONS=true
     volumes:
       - eery-data:/data
     labels:

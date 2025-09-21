@@ -38,10 +38,10 @@ RUN apk add --no-cache \
 WORKDIR /app
 
 # Copy built application and required files
-COPY --from=builder --chown=nodejs:nodejs /app/dist ./dist
-COPY --from=builder --chown=nodejs:nodejs /app/prisma ./prisma
-COPY --from=builder --chown=nodejs:nodejs /app/package.json ./
-COPY --from=builder --chown=nodejs:nodejs /app/pnpm-lock.yaml ./
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/prisma ./prisma
+COPY --from=builder /app/package.json ./
+COPY --from=builder /app/pnpm-lock.yaml ./
 
 # Install only production dependencies and generate Prisma client
 RUN corepack enable && \
