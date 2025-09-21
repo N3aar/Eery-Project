@@ -28,14 +28,16 @@ export default async function sendGoodMorningImage(
 					},
 					select: {
 						daily: true,
+						dailyEnabled: true,
 						mainChannel: true,
 					},
 				});
 
 				const daily = guildData?.daily;
 				const mainChannel = guildData?.mainChannel;
+				const dailyEnabled = guildData?.dailyEnabled;
 
-				if (!daily || !mainChannel) return;
+				if (!daily || !mainChannel || !dailyEnabled) return;
 
 				const imageUrl = getImageByPeriod(period, daily);
 				const channel = guild.channels.cache.get(mainChannel) as TextChannel;
