@@ -38,11 +38,12 @@ export default async function urlHelper(message: Message, retry = 0) {
 
 	try {
 		const webhook = await getOrCreateWebhook(message.channel as TextChannel);
+		const memberOrUser = message.member || message.author;
 
 		await webhook.send({
 			content: replacedContent,
-			username: message.member?.displayName ?? message.author.displayName,
-			avatarURL: message.author.displayAvatarURL({
+			username: memberOrUser.displayName,
+			avatarURL: memberOrUser.displayAvatarURL({
 				forceStatic: false,
 				size: 128,
 			}),

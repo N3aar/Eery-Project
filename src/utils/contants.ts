@@ -46,7 +46,7 @@ export const urlFixers = {
 	"https://x.com/": "https://vxtwitter.com/",
 	"https://vm.tiktok.com/": "https://vm.vxtiktok.com/",
 	"https://www.tiktok.com/": "https://www.vxtiktok.com/",
-	"https://www.instagram.com/": "https://g.embedez.com/",
+	"https://www.instagram.com/": "https://vxinstagram.com/",
 	"https://www.reddit.com/": "https://rxddit.com/",
 } as const;
 
