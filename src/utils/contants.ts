@@ -59,6 +59,7 @@ export const birthdayVideos = [
 	"https://utfs.io/f/5f2da89f-cffd-42f3-bee6-1320e907f68a-z5703.mp4",
 	"https://ixybcdr77k.ufs.sh/f/azNST2svOEPTVrcrDyRHBbspfTSYNQF29AiwRDI8Uxay0r6d",
 	"https://ixybcdr77k.ufs.sh/f/azNST2svOEPTbIMwVFQt5GIsgnbUafFYWKeCc4V8TlNqQwDm",
+	"https://ixybcdr77k.ufs.sh/f/azNST2svOEPTxQiXSNijG7vhUdqFcoP9se3ZK4VJSmYQRxMg",
 ] as const;
 
 export const wordsSourceUrl =
