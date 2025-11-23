@@ -44,10 +44,10 @@ export const urlFixers = {
 	"https://www.youtube.com/watch?v=": "https://youtu.be/",
 	"https://twitter.com/": "https://vxtwitter.com/",
 	"https://x.com/": "https://vxtwitter.com/",
-	"https://vm.tiktok.com/": "https://vm.vxtiktok.com/",
-	"https://www.tiktok.com/": "https://www.vxtiktok.com/",
-	"https://www.instagram.com/": "https://kkinstagram.com/",
 	"https://www.reddit.com/": "https://rxddit.com/",
+	// "https://vm.tiktok.com/": "https://vm.vxtiktok.com/",
+	// "https://www.tiktok.com/": "https://www.vxtiktok.com/",
+	// "https://www.instagram.com/": "https://kkinstagram.com/",
 } as const;
 
 export const birthdayVideos = [
