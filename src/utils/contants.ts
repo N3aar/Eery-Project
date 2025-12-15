@@ -40,8 +40,6 @@ export enum periods {
 }
 
 export const urlFixers = {
-	"https://www.youtube.com/shorts/": "https://youtu.be/",
-	"https://www.youtube.com/watch?v=": "https://youtu.be/",
 	"https://twitter.com/": "https://vxtwitter.com/",
 	"https://x.com/": "https://vxtwitter.com/",
 	"https://www.reddit.com/": "https://rxddit.com/",
